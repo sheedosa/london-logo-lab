@@ -30,7 +30,7 @@ export function HeroQuote() {
       </div>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-3 border-t-2 border-ink pt-3">
         <div>
-          <p className="display text-[28px]">from {gbp(est.perItem)} <span className="font-sans text-sm font-normal">per item</span></p>
+          <p className="display text-[26px]"><span className="font-sans text-sm font-semibold">Sample estimate: </span>from {gbp(est.perItem)} <span className="font-sans text-sm font-normal">per item</span></p>
           <p className="text-xs text-mute">{g.title} in {colour.name}, {quote.qty} off, {quote.method}. Sample formula, not a price.</p>
         </div>
         <Link to="/quote" className="btn btn-orange">Continue</Link>

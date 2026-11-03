@@ -14,7 +14,7 @@ export function Garments() {
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Garments", path: "/garments" }]), { "@context": "https://schema.org", "@type": "CollectionPage", name: "Garments", description: "Sample garment range for embroidery and print." }]} />
 
       <section className="wrap flex flex-col gap-4 pb-6 pt-10 sm:pt-14">
-        <nav aria-label="Breadcrumb" className="text-sm text-mute"><Link to="/" className="underline">Home</Link> · Garments</nav>
+        <nav aria-label="Breadcrumb" className="text-sm text-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Garments</nav>
         <h1 className="text-[44px] sm:text-[64px]">Garments</h1>
         <p className="max-w-2xl text-[17px] text-mute">Twelve sample garments to show the range. Each one lists its colours, the decoration it takes and where the logo can go. The real range and brands come from the client.</p>
         <div className="flex flex-col gap-3 pt-2">

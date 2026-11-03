@@ -19,16 +19,16 @@ export function Schools() {
   const { update } = useQuote();
   return (
     <>
-      <Seo title="Schools and clubs: PE kit, team kits, club and leavers' hoodies" path="/schools-and-clubs" description="Crested PE kit, numbered team kits, club hoodies and leavers' hoodies from The London Logo Lab in Tooting, with the schoolwear know-how of the I&A family: named items, sizing, one spec per school or club."
+      <Seo title="Schools and clubs: PE kit, team kits, club and leavers' hoodies" path="/schools-and-clubs" description="Crested PE kit, numbered team kits, club hoodies and leavers' hoodies from The London Logo Lab in Tooting: named items, sizing days, one spec per school or club."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Schools & clubs", path: "/schools-and-clubs" }]), { "@context": "https://schema.org", "@type": "Service", name: "School and club kit", serviceType: "Embroidered and printed kit for schools and clubs", provider: { "@type": "LocalBusiness", name: SITE.name }, areaServed: "London" }]} />
 
       <section className="relative overflow-hidden bg-orange">
         <div className="rule-grid-ink absolute inset-0" aria-hidden="true" />
         <div className="wrap relative grid items-center gap-10 py-14 lg:grid-cols-[1.2fr_1fr] lg:py-20">
           <div className="flex flex-col gap-6">
-            <nav aria-label="Breadcrumb" className="text-sm"><Link to="/" className="underline">Home</Link> · Schools &amp; clubs</nav>
+            <nav aria-label="Breadcrumb" className="text-sm"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Schools &amp; clubs</nav>
             <h1 className="text-[44px] sm:text-[64px] lg:text-[72px]">Kit for the whole squad, named and numbered.</h1>
-            <p className="max-w-xl text-[18px]">PE kit, team kits, club and leavers' hoodies. We are part of the I&amp;A family, which has dressed South London schools for years, so we know about sizing days, name tapes and the September rush.</p>
+            <p className="max-w-xl text-[18px]">PE kit, team kits, club and leavers' hoodies. We know about sizing days, name tapes and the September rush, and we plan the order around them.</p>
             <div className="flex flex-wrap gap-3">
               <Link to="/quote" onClick={() => update({ garment: "pullover-hoodie", positions: ["left-chest", "back"], qty: 25 })} className="btn btn-ink">Quote a club hoodie</Link>
               <a href="#kits" className="btn btn-ghost">What we make</a>

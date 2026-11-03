@@ -18,14 +18,14 @@ export function Logo({ paper = false, className = "" }: { paper?: boolean; class
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const { quote } = useQuote();
-  const g = store.garment(quote.garment);
+  const { quote, saved } = useQuote();
+  const g = saved ? store.garment(quote.garment) : undefined;
   return (
     <>
       <aside aria-label="Notices">
       {SITE.preview && <div className="bg-deep px-4 py-2 text-center text-[13px] text-paper">Concept preview: garments and prices are samples; quote sending opens at launch</div>}
-      <div className="bg-orange px-4 py-2 text-center text-[13px] font-medium text-ink">
-        {g ? <>Your quote so far: <b>{quote.qty} × {g.title}</b> · <Link to="/quote" className="underline">continue</Link></> : <>Embroidery and print in Tooting · <Link to="/quote" className="underline">build a quote with a live mock-up</Link></>}
+      <div className="flex min-h-11 items-center justify-center bg-orange px-4 text-center text-[13px] font-medium text-ink">
+        {g ? <span>Your quote so far: <b>{quote.qty} × {g.title}</b> · <Link to="/quote" className="inline-flex min-h-11 items-center px-1 underline">continue</Link></span> : <span>Embroidery and print in Tooting · <Link to="/quote" className="inline-flex min-h-11 items-center px-1 underline">build a quote</Link></span>}
       </div>
       </aside>
       <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper">

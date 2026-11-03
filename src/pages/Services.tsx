@@ -47,7 +47,7 @@ export function Services() {
       <section className="on-ink relative overflow-hidden bg-ink text-paper">
         <div className="rule-grid absolute inset-0" aria-hidden="true" />
         <div className="wrap relative flex flex-col gap-6 py-14 lg:py-20">
-          <nav aria-label="Breadcrumb" className="text-sm text-paper-mute"><Link to="/" className="underline">Home</Link> · Services</nav>
+          <nav aria-label="Breadcrumb" className="text-sm text-paper-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Services</nav>
           <h1 className="max-w-4xl text-[44px] sm:text-[64px]">Four things we do, all under one roof.</h1>
           <nav aria-label="On this page" className="flex flex-wrap gap-2">
             {JUMP.map(([id, l]) => <a key={id} href={`#${id}`} className="chip border-paper text-paper hover:bg-paper hover:text-ink">{l}</a>)}
@@ -89,7 +89,7 @@ export function Services() {
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead><tr className="border-b-2 border-ink">{["", "Embroidery", "Print"].map((h) => <th key={h} scope="col" className="label py-3 pr-4 font-sans">{h || <span className="sr-only">Factor</span>}</th>)}</tr></thead>
             <tbody>
-              {[["Best for", "Logos, crests, names on polos, fleece, caps", "Big designs, photos, event and crew tees"], ["Size", "Up to 10 cm chest, 30 cm back", "Up to the full back"], ["Colours", "Thread colours, usually up to [N]", "Flat colours by screen or full colour digitally"], ["Wears", "Decades; outlasts the garment", "Years with care; fades before thread does"], ["Setup", "Digitising once: £[SETUP]", "Screens per colour: £[SCREEN CHARGE]; none for digital"], ["Minimum", "[MINIMUM ORDER]", "[MIN RUN] screen; one piece digital"]].map(([a, b, c]) => (
+              {[["Best for", "Logos, crests, names on polos, fleece, caps", "Big designs, photos, event and crew tees"], ["Size", "Up to 10 cm chest, 30 cm back", "Up to the full back"], ["Colours", "Thread colours, usually up to [N]", "Flat colours by screen or full colour digitally"], ["Wear", "Stitched into the cloth; the usual choice where the garment is washed often", "Depends on ink, fabric and wash care: [PRINT CARE NOTE]"], ["Setup", "Digitising once: £[SETUP]", "Screens per colour: £[SCREEN CHARGE]; none for digital"], ["Minimum", "[MINIMUM ORDER]", "[MIN RUN] screen; one piece digital"]].map(([a, b, c]) => (
                 <tr key={a} className="border-b border-line align-top"><th scope="row" className="py-3 pr-4 font-semibold">{a}</th><td className="py-3 pr-4 text-mute">{b}</td><td className="py-3 text-mute">{c}</td></tr>
               ))}
             </tbody>

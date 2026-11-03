@@ -64,8 +64,7 @@ export function QuoteBuilder({ compact = false }: { compact?: boolean }) {
           <p className="mt-2 text-sm text-mute" aria-live="polite">{g.title} in {colour.name}. {quote.positions.map((p) => `${store.position(p).label}: ${methodFor(quote.method, p)}`).join(" · ")}. {quote.logo ? "Showing your artwork at roughly the right size." : "Dashed boxes mark where the logo goes; add your artwork to see it placed."}</p>
         </div>
         <div className="rounded-pill bg-ink p-5 text-paper on-ink">
-          <p className="label text-paper-mute">Sample estimate</p>
-          <p className="display mt-1 text-[36px] text-orange sm:text-[44px]" aria-live="polite">from {gbp(est.perItem)} <span className="font-sans text-base text-paper">per item</span></p>
+          <p className="display mt-1 text-[28px] text-orange sm:text-[36px]" aria-live="polite"><span className="font-sans text-base font-semibold text-paper">Sample estimate: </span>from {gbp(est.perItem)} <span className="font-sans text-base text-paper">per item</span></p>
           <p className="text-sm text-paper-mute">{gbp(est.total)} for {quote.qty} · band {est.band.label} · garment {gbp(est.base)} + decoration {gbp(est.decoration)} × {est.band.factor}</p>
           <div className="mt-4 grid grid-cols-4 gap-1 text-center text-xs">
             {BANDS.map((b) => { const e = estimate({ ...quote, qty: b.min })!; const on = b === est.band; return (

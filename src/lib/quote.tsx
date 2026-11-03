@@ -48,8 +48,8 @@ export const DEFAULT_QUOTE: Quote = {
 const KEY = "logolab-quote";
 const MAX_PERSISTED_LOGO = 400_000; // characters of data URL; bigger logos stay in memory only
 
-type Ctx = { quote: Quote; update: (patch: Partial<Quote>) => void; reset: () => void };
-const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, update: () => {}, reset: () => {} });
+type Ctx = { quote: Quote; saved: boolean; update: (patch: Partial<Quote>) => void; reset: () => void };
+const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, saved: false, update: () => {}, reset: () => {} });
 
 function sanitise(q: Quote): Quote {
   const g = store.garment(q.garment);
@@ -61,18 +61,20 @@ function sanitise(q: Quote): Quote {
 }
 
 export function QuoteProvider({ children }: { children: ReactNode }) {
-  const [quote, set] = useState<Quote>(() => {
-    try { const v = localStorage.getItem(KEY); return v ? sanitise({ ...DEFAULT_QUOTE, ...(JSON.parse(v) as Partial<Quote>) }) : DEFAULT_QUOTE; } catch { return DEFAULT_QUOTE; }
+  // `saved` is true once the visitor has made a choice (now or on an earlier visit); the header strip keys off it.
+  const [state, set] = useState<{ quote: Quote; saved: boolean }>(() => {
+    try { const v = localStorage.getItem(KEY); return v ? { quote: sanitise({ ...DEFAULT_QUOTE, ...(JSON.parse(v) as Partial<Quote>) }), saved: true } : { quote: DEFAULT_QUOTE, saved: false }; } catch { return { quote: DEFAULT_QUOTE, saved: false }; }
   });
+  const quote = state.quote;
   const persist = (q: Quote) => {
     try {
       const logo = q.logo?.kind === "image" && q.logo.dataUrl.length > MAX_PERSISTED_LOGO ? null : q.logo;
       localStorage.setItem(KEY, JSON.stringify({ ...q, logo }));
     } catch { /* private mode or quota: the quote lives in memory for this visit */ }
   };
-  const update = (patch: Partial<Quote>) => set((prev) => { const next = sanitise({ ...prev, ...patch }); persist(next); return next; });
-  const reset = () => { set(DEFAULT_QUOTE); try { localStorage.removeItem(KEY); } catch { /* ignore */ } };
-  return <QuoteContext.Provider value={{ quote, update, reset }}>{children}</QuoteContext.Provider>;
+  const update = (patch: Partial<Quote>) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch }); persist(next); return { quote: next, saved: true }; });
+  const reset = () => { set({ quote: DEFAULT_QUOTE, saved: false }); try { localStorage.removeItem(KEY); } catch { /* ignore */ } };
+  return <QuoteContext.Provider value={{ quote, saved: state.saved, update, reset }}>{children}</QuoteContext.Provider>;
 }
 
 export const useQuote = () => useContext(QuoteContext);
@@ -83,7 +85,7 @@ export function summary(q: Quote): string {
   const e = estimate(q);
   if (!g || !e) return "";
   const lines = [
-    "Quote request: The London Logo Lab",
+    "Quote request: The London Logo Lab (sample estimate, not a price)",
     `Garment: ${g.title} in ${q.colour}`,
     `Quantity: ${q.qty} (band ${e.band.label})`,
     `Decoration: ${q.method === "both" ? "embroidery on chest and sleeve, print on back" : q.method}`,

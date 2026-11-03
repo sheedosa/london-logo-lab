@@ -22,16 +22,16 @@ function AreaDiagram() {
 export function About() {
   return (
     <>
-      <Seo title="About and visit: the workshop in Tooting" path="/about" description="The London Logo Lab is an embroidery and print workshop in Tooting, South London, part of the I&A family. How we work, what to bring, and how to find us."
+      <Seo title="About and visit: the workshop in Tooting" path="/about" description="The London Logo Lab is an embroidery and print workshop in Tooting, South London. How we work, what to bring, and how to find us."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "About & visit", path: "/about" }]), { "@context": "https://schema.org", "@type": "AboutPage", name: "About The London Logo Lab" }]} />
 
       <section className="on-ink relative overflow-hidden bg-ink text-paper">
         <div className="rule-grid absolute inset-0" aria-hidden="true" />
         <div className="wrap relative grid items-center gap-10 py-14 lg:grid-cols-[1.2fr_1fr] lg:py-20">
           <div className="flex flex-col gap-6">
-            <nav aria-label="Breadcrumb" className="text-sm text-paper-mute"><Link to="/" className="underline">Home</Link> · About &amp; visit</nav>
+            <nav aria-label="Breadcrumb" className="text-sm text-paper-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · About &amp; visit</nav>
             <h1 className="text-[44px] sm:text-[64px] lg:text-[72px]">A workshop, not a web form.</h1>
-            <p className="max-w-xl text-[18px] text-paper-mute">The London Logo Lab is the embroidery and print arm of the I&amp;A family, run from {SITE.area}. Machines, thread, screens and people you can talk to, [MINUTES] minutes from the Tube.</p>
+            <p className="max-w-xl text-[18px] text-paper-mute">The London Logo Lab is an embroidery and print workshop in {SITE.area}, part of the I&amp;A family. Machines, thread, screens and people you can talk to, [MINUTES] minutes from the Tube.</p>
           </div>
           <Marque size={200} tile="#f4651f" thread="#1b1916" className="hidden justify-self-end lg:block" />
         </div>
@@ -70,15 +70,6 @@ export function About() {
         </div>
       </section>
 
-      <section className="wrap py-16 lg:py-20">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-1"><p className="label text-mute">Part of the I&amp;A family</p><h2 className="mt-2 text-[32px] sm:text-[40px]">Four shops, one group.</h2></div>
-          <div className="grid gap-4 sm:grid-cols-3 lg:col-span-2">
-            {SITE.family.map((f) => <a key={f.name} href={f.url} className="flex min-h-28 flex-col justify-between rounded-pill border-2 border-ink p-4 transition-colors hover:bg-orange"><span className="label text-mute">Sister shop</span><span className="text-lg font-semibold">{f.name}</span></a>)}
-          </div>
-        </div>
-        <p className="mt-8 max-w-2xl text-mute">I&amp;A has traded in Tooting for decades: schoolwear, modest fashion and tailoring. The Logo Lab brings the embroidery and print that those shops already needed under its own roof, for everyone else too.</p>
-      </section>
     </>
   );
 }

@@ -46,7 +46,7 @@ const cats = cat.categories.map((c) => `- ${c.title}: ${c.blurb}`).join("\n");
 const garments = cat.garments.map((g) => `- [${g.title}](${SITE}/garments/${g.handle}): ${g.blurb} ${g.methods.join(" or ")}.`).join("\n");
 writeFileSync(join(dist, "llms.txt"), `# The London Logo Lab
 
-> Embroidery, print, custom workwear and uniforms from a workshop in Tooting, South London. Part of the I&A family (I&A Schoolwear, I&A Fashions, I&A Tailoring). Polos, t-shirts, sweatshirts, hoodies, fleece, softshell jackets, hi-vis, caps, beanies and aprons, decorated with the customer's logo by embroidery or print. The site's quote builder shows a live flat mock-up of the chosen garment with the logo positions marked and a sample estimate by quantity band (1 to 9, 10 to 24, 25 to 49, 50+).
+> Embroidery, print, custom workwear and uniforms from a workshop in Tooting, South London. Polos, t-shirts, sweatshirts, hoodies, fleece, softshell jackets, hi-vis, caps, beanies and aprons, decorated with the customer's logo by embroidery or print. The site's quote builder shows a live flat mock-up of the chosen garment with the logo positions marked and a sample estimate by quantity band (1 to 9, 10 to 24, 25 to 49, 50+).
 
 Note: this site is a concept preview. Garments are samples, prices are a labelled sample formula, and quote sending opens at launch. Address, phone, minimums, turnaround and prices are placeholders until the business confirms them. Written to be readable by people and by AI search.
 

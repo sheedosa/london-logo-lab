@@ -22,17 +22,17 @@ export function Home() {
 
       <section className="on-ink relative overflow-hidden bg-ink text-paper">
         <div className="rule-grid absolute inset-0" aria-hidden="true" />
-        <div className="wrap relative grid items-center gap-10 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-20">
+        <div className="wrap relative grid items-center gap-8 py-6 sm:py-14 lg:grid-cols-[1.1fr_1fr] lg:gap-10 lg:py-20">
           <div className="flex flex-col gap-6">
             <p className="label text-orange">Embroidery · Print · Workwear · {SITE.area}</p>
-            <h1 className="text-[48px] text-paper sm:text-[72px] lg:text-[84px]">Your logo,<br />stitched in<br />Tooting.</h1>
+            <h1 className="text-[44px] text-paper sm:text-[72px] lg:text-[84px]">Your logo,<br />stitched in<br />Tooting.</h1>
             <p className="max-w-lg text-[18px] text-paper-mute">Polos, hoodies, hi-vis, caps and aprons with your logo on them, embroidered and printed in our South London workshop. See it on the garment before you order.</p>
             <div className="flex flex-wrap gap-3">
               <Link to="/quote" className="btn btn-orange">Build a quote</Link>
               <Link to="/garments" className="btn btn-outline-paper">See the garments</Link>
             </div>
           </div>
-          <HeroQuote />
+          <div className="order-first lg:order-last"><HeroQuote /></div>
         </div>
       </section>
 
@@ -86,10 +86,13 @@ export function Home() {
       </section>
 
       <section className="wrap pb-16">
-        <div className="on-ink grid gap-8 rounded-pill bg-ink p-8 text-paper sm:p-12 lg:grid-cols-3">
-          {[["[TURNAROUND]", "standard turnaround", "from artwork approval to collection. Express: [EXPRESS TURNAROUND]."], ["[MINIMUM ORDER]", "minimum order", "one-offs and samples: [ONE-OFF POLICY]."], ["£[SETUP]", "logo setup", "digitising your logo for embroidery, once; print screens: [SCREEN CHARGE]."]].map(([n, l, d]) => (
-            <div key={l} className="flex flex-col gap-1"><p className="display text-[32px] text-orange sm:text-[40px]">{n}</p><p className="font-semibold">{l}</p><p className="text-sm text-paper-mute">Placeholder, {d}</p></div>
-          ))}
+        <div className="rounded-pill border-2 border-ink bg-stone p-6 sm:p-8">
+          <p className="label mb-5 text-mute">Turnaround, minimums and setup: to be confirmed by the workshop</p>
+          <dl className="grid gap-6 sm:grid-cols-3">
+            {[["Standard turnaround", "[TURNAROUND] from artwork approval to collection. Express: [EXPRESS TURNAROUND]."], ["Minimum order", "[MINIMUM ORDER]. One-offs and samples: [ONE-OFF POLICY]."], ["Logo setup", "£[SETUP] to digitise your logo for embroidery, once. Print screens: [SCREEN CHARGE]."]].map(([l, d]) => (
+              <div key={l} className="border-t-2 border-ink pt-3"><dt className="font-semibold">{l}</dt><dd className="mt-1 text-mute">{d}</dd></div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -105,7 +108,7 @@ export function Home() {
         <div className="wrap grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
           <div className="flex flex-col gap-4">
             <p className="label">Schools &amp; clubs</p>
-            <h2 className="text-[32px] sm:text-[44px]">PE kit, team kits and leavers' hoodies, with the schoolwear know-how of the I&amp;A family.</h2>
+            <h2 className="text-[32px] sm:text-[44px]">PE kit, team kits and leavers' hoodies, named and numbered.</h2>
             <p className="text-[17px]">Crested polos, named hoodies, numbered shirts. One spec per school or club, sized and re-ordered without starting again.</p>
             <Link to="/schools-and-clubs" className="btn btn-ink self-start">Schools &amp; clubs</Link>
           </div>
@@ -129,7 +132,7 @@ export function Home() {
         <div className="flex max-w-xl flex-col gap-2">
           <p className="label text-mute">The workshop</p>
           <h2 className="text-[32px] sm:text-[40px]">{SITE.area}.</h2>
-          <p className="text-mute">{SITE.address}. Open {SITE.hours}. Bring a garment and a logo, or a van and a team. Part of the I&amp;A family.</p>
+          <p className="text-mute">{SITE.address}. Open {SITE.hours}. Bring a garment and a logo, or a van and a team.</p>
         </div>
         <div className="flex flex-wrap gap-3"><Link to="/quote" className="btn btn-ink">Build a quote</Link><Link to="/about" className="btn btn-ghost">Visit</Link></div>
       </section>

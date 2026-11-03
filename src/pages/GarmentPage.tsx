@@ -41,7 +41,7 @@ export function GarmentPage() {
         </div>
 
         <div className="flex flex-col gap-6 lg:sticky lg:top-24 lg:self-start">
-          <nav aria-label="Breadcrumb" className="text-sm text-mute"><Link to="/" className="underline">Home</Link> · <Link to="/garments" className="underline">Garments</Link> · {cat.title}</nav>
+          <nav aria-label="Breadcrumb" className="text-sm text-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · <Link to="/garments" className="inline-flex min-h-11 items-center underline">Garments</Link> · {cat.title}</nav>
           <div className="flex flex-col gap-2">
             {g.badge && <span className="label self-start rounded-pill bg-orange px-2 py-1.5 text-[11px]">{g.badge}</span>}
             <h1 className="text-[36px] sm:text-[48px]">{g.title}</h1>
