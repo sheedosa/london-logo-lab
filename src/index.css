@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* The London Logo Lab identity: Bold workshop.
+   Ink (warm near-black) is the ground for hero, panels and footer; Paper (warm off-white) for working pages;
+   Orange (safety orange) is the one accent, used as a fill with Ink text or as text on Ink only.
+   Display: Archivo Black. Body and 0.15em uppercase labels: Archivo. Corners 3px. See docs/BRAND.md. */
+@theme {
+  --font-display: "Archivo Black", "Archivo", Arial Black, sans-serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, Arial, sans-serif;
+  --color-ink: #1b1916;        /* ground and text */
+  --color-ink-soft: #2e2a25;   /* hover on ink */
+  --color-deep: #121110;       /* footer, pressed states */
+  --color-paper: #f3eee4;      /* warm paper */
+  --color-stone: #e6dfd0;      /* neutral surface, warm bias */
+  --color-line: #d9d1c2;
+  --color-mute: #5f5850;       /* secondary text: 6.0:1 on paper, 5.3:1 on stone */
+  --color-paper-mute: #c9c2b5; /* secondary text on ink: 9.9:1 */
+  --color-orange: #f4651f;     /* accent: 5.6:1 against ink */
+  --color-orange-deep: #d9530f;
+  --color-rust: #b54106;       /* orange for large text and icons on paper/stone: 4.9:1 on paper */
+  --radius-pill: 3px;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+body { @apply bg-paper text-ink font-sans antialiased; font-size: 16px; font-weight: 400; line-height: 1.55; }
+strong, b { font-weight: 600; }
+h1, h2, .display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; text-wrap: balance; }
+h3 { font-weight: 600; text-wrap: balance; }
+
+.label { text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; }
+.wrap { @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8; }
+
+.btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-pill px-6 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink; }
+.btn-ink { @apply bg-ink text-paper hover:bg-ink-soft; }
+.btn-orange { @apply bg-orange text-ink hover:bg-orange-deep; }
+.btn-paper { @apply bg-paper text-ink hover:bg-stone; }
+.btn-outline-paper { @apply border-2 border-paper bg-transparent text-paper hover:bg-paper hover:text-ink; }
+.btn-ghost { @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
+.chip { @apply inline-flex min-h-11 items-center rounded-pill border-2 border-ink bg-transparent px-4 text-sm font-medium whitespace-nowrap transition-colors; }
+.chip[aria-pressed="true"], .chip[aria-current="page"] { @apply bg-ink text-paper; }
+.chip .sub { color: var(--color-mute); }
+.chip[aria-pressed="true"] .sub { color: var(--color-paper-mute); }
+.field { @apply h-12 w-full rounded-pill border-2 border-ink bg-paper px-3 text-base; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--color-orange); outline-offset: 2px; }
+.on-ink a:focus-visible, .on-ink button:focus-visible, .on-ink input:focus-visible, .on-ink select:focus-visible { outline-color: var(--color-orange); }
+
+/* Thin rule grid used behind typographic heroes (decorative, aria-hidden in markup) */
+.rule-grid { background-image: linear-gradient(to right, rgba(243, 238, 228, 0.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(243, 238, 228, 0.09) 1px, transparent 1px); background-size: 64px 64px; }
+.rule-grid-ink { background-image: linear-gradient(to right, rgba(27, 25, 22, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(27, 25, 22, 0.08) 1px, transparent 1px); background-size: 64px 64px; }
