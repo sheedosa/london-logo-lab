@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Garment } from "./Garment";
-import type { Garment as G } from "../lib/store";
+import { methodList, type Garment as G } from "../lib/store";
 
 export function GarmentCard({ g }: { g: G }) {
   const c = g.colours[Math.min(1, g.colours.length - 1)];
@@ -15,7 +15,7 @@ export function GarmentCard({ g }: { g: G }) {
         </ul>
       </div>
       <h3 className="text-base group-hover:underline">{g.title}</h3>
-      <p className="-mt-1.5 text-sm text-mute">{g.methods.map((m) => m[0].toUpperCase() + m.slice(1)).join(" or ")} · from £[PRICE]</p>
+      <p className="-mt-1.5 text-mute">{methodList(g.methods)} · <span className="whitespace-nowrap">from £[PRICE]</span></p>
     </Link>
   );
 }

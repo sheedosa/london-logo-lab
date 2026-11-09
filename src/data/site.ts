@@ -17,31 +17,37 @@ export const SITE = {
     { name: "I&A Tailoring", url: "https://sheedosa.github.io/iana-tailoring/" },
   ],
   preview: true, // concept preview: sample garments, sample pricing formula, quote sending switched off
+  // Confirmed by the client
+  services: ["Embroidery", "Screen printing", "DTF printing", "Vinyl", "Workwear supply", "Uniforms"],
+  customers: ["Trades", "Schools", "Sports clubs"],
+  minimumOrder: "1 item",
+  turnaround: "within 7 days",
+  pricing: "Priced per item, or by quote",
   toConfirm: [
     "legal entity name, company number and VAT number",
     "workshop address, phone, email and opening hours",
     "garment range, brands stocked and colours offered",
-    "prices per garment and per decoration (embroidery, print, by position and size)",
-    "quantity bands and the discount at each band",
-    "minimum order (if any) and setup or digitising charges",
-    "standard and express turnaround times",
+    "prices per garment and per decoration (embroidery, screen, DTF, vinyl; by position and size)",
+    "quantity bands and the price at each band",
+    "setup charges: embroidery digitising, screens per colour",
+    "whether an express service is offered",
     "artwork requirements (file types, minimum size, thread colour matching)",
     "delivery charges, collection, and returns on decorated goods",
-    "school and club programme terms (parent ordering, named items, sizing days)",
-    "client reviews for the testimonial slots",
+    "school and club terms (parent ordering, named items, numbering, sizing days)",
+    "client reviews for the testimonial slot",
+    "workshop photographs for the photo slots",
   ],
 };
 
 export const SECTORS = [
-  { k: "trades", t: "Trades", d: "Polos, hoodies, hi-vis and softshells with your name on the chest and your number on the back." },
-  { k: "schools", t: "Schools & clubs", d: "PE kit, team kits, leavers' hoodies and staff wear, with named items and parent ordering." },
-  { k: "hospitality", t: "Hospitality", d: "Aprons, tees and caps that match the room and survive the wash." },
-  { k: "corporate", t: "Corporate", d: "Uniform programmes for teams of ten to a thousand, re-ordered from one saved spec." },
+  { k: "trades", t: "Trades", d: "Polos, softshells and hi-vis with your name on the chest and the back. One van's worth or one jacket.", to: "/quote" },
+  { k: "schools", t: "Schools", d: "PE kit, staff wear and leavers' hoodies. Named, sized and bagged by class.", to: "/schools-and-clubs" },
+  { k: "clubs", t: "Sports clubs", d: "Team kits with names and numbers, club hoodies, coaches' jackets.", to: "/schools-and-clubs" },
 ] as const;
 
 export const STEPS = [
-  { n: "01", t: "Build your quote", d: "Pick a garment, colour, quantity and where the logo goes. The mock-up updates as you choose." },
-  { n: "02", t: "Send us your artwork", d: "Upload a logo or tell us what you want. We check it, digitise it for embroidery and send a proof." },
-  { n: "03", t: "Approve the proof", d: "A flat mock-up with thread or ink colours, sizes and positions marked. Nothing is stitched until you say so." },
-  { n: "04", t: "Made in Tooting", d: "Embroidered and printed in our South London workshop, then collected or delivered in [TURNAROUND]." },
+  { n: "01", t: "Build your quote", d: "Pick a garment, a colour and where the logo goes. The mock-up changes as you choose." },
+  { n: "02", t: "Send us your logo", d: "Any file is fine to start. We check it and get it ready to stitch or print." },
+  { n: "03", t: "Say yes to the proof", d: "You see a flat proof with colours and sizes marked. Nothing is made until you say so." },
+  { n: "04", t: "Ready within 7 days", d: "Made in our Tooting workshop. Collection or delivery: [DELIVERY OPTIONS]." },
 ] as const;

@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { Seo, breadcrumbs } from "../components/Seo";
 import { Garment } from "../components/Garment";
+import { PhotoSlot } from "../components/PhotoSlot";
+import { Nb } from "../components/Nb";
 import { Needle, Squeegee, Van, Spool, Registration, InkDrop } from "../components/Icons";
-import { img, store } from "../lib/store";
-import { STEPS } from "../data/site";
+import { store } from "../lib/store";
+import { SITE, STEPS } from "../data/site";
 
-const JUMP = [["embroidery", "Embroidery"], ["print", "Print"], ["workwear", "Workwear supply"], ["uniforms", "Uniform programmes"]] as const;
+const JUMP = [["embroidery", "Embroidery"], ["screen", "Screen printing"], ["dtf", "DTF printing"], ["vinyl", "Vinyl"], ["workwear", "Workwear supply"], ["uniforms", "Uniforms"]] as const;
 
 /** Stitch diagram: satin stitch on a letter shape, with the hoop ring. Decorative. */
 function StitchDiagram() {
@@ -37,18 +39,59 @@ function ScreensDiagram() {
   );
 }
 
+/** DTF: a printed film coming off its sheet onto the garment under a heat press platen. Decorative. */
+function DtfDiagram() {
+  return (
+    <svg viewBox="0 0 240 200" aria-hidden="true" className="w-full max-w-[300px]">
+      <rect x="30" y="20" width="180" height="34" fill="#1b1916" stroke="#1b1916" strokeWidth="1.5" />
+      <path d="M120 54v18" stroke="#1b1916" strokeWidth="1.5" />
+      <rect x="40" y="128" width="160" height="50" fill="#f3eee4" stroke="#1b1916" strokeWidth="1.5" />
+      <path d="M58 118 L160 88 L190 112 L88 142 Z" fill="#f3eee4" stroke="#1b1916" strokeWidth="1.5" />
+      <g stroke="#1b1916" strokeWidth="1.5"><rect x="96" y="104" width="22" height="18" fill="#f4651f" transform="rotate(-16 107 113)" /><circle cx="134" cy="106" r="9" fill="#2b4fbf" /><rect x="120" y="118" width="26" height="6" fill="#1f4a36" transform="rotate(-16 133 121)" /></g>
+      <path d="M160 88 Q176 80 190 112" fill="none" stroke="#1b1916" strokeWidth="1.5" strokeDasharray="3 3" />
+    </svg>
+  );
+}
+/** Vinyl: letters cut from a sheet, the waste being lifted away. Decorative. */
+function VinylDiagram() {
+  return (
+    <svg viewBox="0 0 240 200" aria-hidden="true" className="w-full max-w-[300px]">
+      <rect x="24" y="40" width="192" height="120" fill="#e6dfd0" stroke="#1b1916" strokeWidth="1.5" />
+      <g fill="#1b1916"><path d="M50 70h14v40h20v12H50z" /><path d="M94 70h34v12h-20v8h18v12h-18v20H94z" /><path d="M138 70h16l10 30 10-30h16l-18 52h-16z" /></g>
+      <path d="M24 160 L24 130 Q60 150 80 160 Z" fill="#f3eee4" stroke="#1b1916" strokeWidth="1.5" />
+      <path d="M216 40 Q230 60 216 84" fill="none" stroke="#1b1916" strokeWidth="1.5" />
+      <g fill="#f4651f" stroke="#1b1916" strokeWidth="1.5"><rect x="190" y="132" width="10" height="10" /></g>
+    </svg>
+  );
+}
+
+const Bullets = ({ items, onInk = false }: { items: string[]; onInk?: boolean }) => (
+  <ul className={`grid gap-2 sm:grid-cols-2 ${onInk ? "text-paper-mute" : "text-mute"}`}>
+    {items.map((x) => <li key={x} className="flex gap-2"><span className="mt-2.5 h-1.5 w-1.5 shrink-0 bg-orange" aria-hidden="true" /><span><Nb>{x}</Nb></span></li>)}
+  </ul>
+);
+
+const COMPARE: [string, string, string, string, string][] = [
+  ["Best for", "Logos and crests on polos, fleece, caps", "Bold designs in a few colours on tees and hoodies", "Full-colour logos and photos, small runs", "Names, numbers and short text"],
+  ["Looks like", "Raised thread with a slight sheen", "Flat, solid ink", "Smooth, bright print with fine detail", "Crisp single colour with clean edges"],
+  ["Good value", "Any size of order", "Bigger runs, once the screens are made", "From one piece", "From one piece"],
+  ["Setup", "Logo prepared for stitching: £[SETUP]", "One screen per colour: £[SCREEN CHARGE]", "[DTF SETUP]", "[VINYL SETUP]"],
+  ["Not for", "Hi-vis tape lines", "Fleece pile, caps", "Fleece pile, knitwear", "Fleece pile, very fine detail"],
+];
+
 export function Services() {
   return (
     <>
-      <Seo title="Services: embroidery, print, workwear supply, uniform programmes" path="/services" description="What The London Logo Lab does: logo embroidery, screen and digital print, plain and decorated workwear supply, and uniform programmes for teams, from a workshop in Tooting."
+      <Seo title="Services: embroidery, screen printing, DTF, vinyl, workwear and uniforms" path="/services" description="What The London Logo Lab does in Tooting: embroidery, screen printing, DTF printing and vinyl on workwear, plus workwear supply and uniforms for trades, schools and sports clubs. From 1 item, ready within 7 days."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }]),
-          ...JUMP.map(([id, name]) => ({ "@context": "https://schema.org", "@type": "Service", name, provider: { "@type": "LocalBusiness", name: "The London Logo Lab" }, areaServed: "London", url: `https://sheedosa.github.io/london-logo-lab/services#${id}` }))]} />
+          ...JUMP.map(([id, name]) => ({ "@context": "https://schema.org", "@type": "Service", name, provider: { "@type": "LocalBusiness", name: SITE.name }, areaServed: "London", url: `${SITE.url}/services#${id}` }))]} />
 
       <section className="on-ink relative overflow-hidden bg-ink text-paper">
         <div className="rule-grid absolute inset-0" aria-hidden="true" />
-        <div className="wrap relative flex flex-col gap-6 py-14 lg:py-20">
-          <nav aria-label="Breadcrumb" className="text-sm text-paper-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Services</nav>
-          <h1 className="max-w-4xl text-[44px] sm:text-[64px]">Four things we do, all under one roof.</h1>
+        <div className="wrap relative flex flex-col gap-6 py-12 lg:py-20">
+          <nav aria-label="Breadcrumb" className="text-[14px] text-paper-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Services</nav>
+          <h1 className="max-w-4xl text-[40px] sm:text-[64px]">Everything your logo needs, under one roof.</h1>
+          <p className="max-w-2xl text-[18px] text-paper-mute">Four ways to decorate, plus the garments and the uniform plan. From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
           <nav aria-label="On this page" className="flex flex-wrap gap-2">
             {JUMP.map(([id, l]) => <a key={id} href={`#${id}`} className="chip border-paper text-paper hover:bg-paper hover:text-ink">{l}</a>)}
           </nav>
@@ -59,38 +102,51 @@ export function Services() {
         <div className="flex flex-col gap-4">
           <Needle size={36} className="text-rust" />
           <h2 className="text-[32px] sm:text-[44px]">Embroidery</h2>
-          <p className="text-[17px]">The lasting way to put a logo on a chest. We digitise your artwork into a stitch file, match thread colours, and run it on multi-head machines in the workshop. Left chest, right chest, sleeve, cap front, apron bib, across the back.</p>
-          <ul className="grid gap-2 text-mute sm:grid-cols-2">
-            {["Logos up to about 10 cm on the chest, 30 cm across the back", "Thread colours matched to your brand: [THREAD RANGE]", "Setup (digitising) once per logo: £[SETUP]", "Best on polos, sweats, fleece, softshell, caps and aprons"].map((x) => <li key={x} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-orange" aria-hidden="true" />{x}</li>)}
-          </ul>
+          <p className="text-[17px]">The lasting way to put a logo on a chest. We turn your logo into a stitch file, match the thread colours and stitch it here in the workshop.</p>
+          <Bullets items={["Left or right chest, sleeve, back, cap front, apron bib", "Thread colours matched to your brand: [THREAD RANGE]", "Logo setup, once per logo: £[SETUP]", "Best on polos, sweats, fleece, softshells, caps"]} />
           <Link to="/quote" className="btn btn-ink self-start">Quote embroidery</Link>
         </div>
         <div className="flex justify-center rounded-pill bg-stone p-6"><StitchDiagram /></div>
       </section>
 
-      <section id="print" className="scroll-mt-24 bg-stone py-16 lg:py-20">
+      <section id="screen" className="scroll-mt-24 bg-stone py-16 lg:py-20">
         <div className="wrap grid items-center gap-10 lg:grid-cols-2">
-          <div className="order-2 flex justify-center rounded-pill bg-paper p-6 lg:order-1"><ScreensDiagram /></div>
-          <div className="order-1 flex flex-col gap-4 lg:order-2">
+          <div className="flex flex-col gap-4 lg:order-2">
             <Squeegee size={36} className="text-rust" />
-            <h2 className="text-[32px] sm:text-[44px]">Print</h2>
-            <p className="text-[17px]">Screen print for runs with a few flat colours, digital print for photographs and one-offs. Big back designs, event tees, hi-vis with the company name, crew hoodies.</p>
-            <ul className="grid gap-2 text-mute sm:grid-cols-2">
-              {["Screen print: [MIN RUN] and up, one screen per colour", "Digital print: full colour, from one piece", "Hi-vis: print only, so the reflective tape stays intact", "Artwork: vector preferred; we redraw simple logos for [ARTWORK FEE]"].map((x) => <li key={x} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-orange" aria-hidden="true" />{x}</li>)}
-            </ul>
-            <Link to="/quote" className="btn btn-ink self-start">Quote print</Link>
+            <h2 className="text-[32px] sm:text-[44px]">Screen printing</h2>
+            <p className="text-[17px]">Ink pushed through a screen, one screen per colour. Bold and flat, and the more you order, the better the price per item.</p>
+            <Bullets items={["Big back prints and chest logos", "Event tees, crew hoodies, club shirts", "Screens per colour: £[SCREEN CHARGE]", "Ink colours matched: [INK MATCHING]"]} />
+            <Link to="/quote" className="btn btn-ink self-start">Quote screen printing</Link>
           </div>
+          <div className="flex justify-center rounded-pill bg-paper p-6 lg:order-1"><ScreensDiagram /></div>
         </div>
       </section>
 
-      <section className="wrap py-16 lg:py-20">
-        <h2 className="mb-8 text-[32px] sm:text-[40px]">Embroidery or print?</h2>
-        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Embroidery or print comparison table">
-          <table className="w-full min-w-[560px] border-collapse text-left">
-            <thead><tr className="border-b-2 border-ink">{["", "Embroidery", "Print"].map((h) => <th key={h} scope="col" className="label py-3 pr-4 font-sans">{h || <span className="sr-only">Factor</span>}</th>)}</tr></thead>
+      {/* DTF and vinyl side by side: both are pressed on with heat, both work from one piece */}
+      <section className="wrap grid gap-6 py-16 lg:grid-cols-2 lg:py-20">
+        {[
+          { id: "dtf", I: InkDrop, t: "DTF printing", d: "Your design is printed onto film, then pressed onto the garment with heat. Full colour, fine detail, and good value from a single piece.", b: ["Photos, gradients, many-colour logos", "Tees, hoodies, hi-vis, aprons, cap fronts"], D: DtfDiagram },
+          { id: "vinyl", I: Registration, t: "Vinyl", d: "Letters and shapes cut from coloured vinyl and pressed on. Clean, sharp and quick. Our go-to for names and numbers.", b: ["Player names and squad numbers", "Short text and one-colour logos"], D: VinylDiagram },
+        ].map((x) => (
+          <article key={x.id} id={x.id} className="scroll-mt-24 flex flex-col gap-4 rounded-pill border-2 border-ink p-6 sm:p-8">
+            <div className="flex items-start justify-between gap-4"><x.I size={36} className="text-rust" /><div className="w-40 sm:w-48"><x.D /></div></div>
+            <h2 className="text-[30px] sm:text-[36px]">{x.t}</h2>
+            <p className="text-[17px]">{x.d}</p>
+            <Bullets items={x.b} />
+            <Link to="/quote" className="btn btn-ink mt-auto self-start">Quote {x.t.toLowerCase().replace("dtf", "DTF")}</Link>
+          </article>
+        ))}
+      </section>
+
+      <section className="wrap pb-16 lg:pb-20">
+        <h2 className="mb-3 text-[32px] sm:text-[40px]">Which one is right?</h2>
+        <p className="mb-8 max-w-2xl text-mute">A rough guide. Tell us what it's for and we'll help you pick.</p>
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Comparison of embroidery, screen printing, DTF and vinyl">
+          <table className="w-full min-w-[760px] border-collapse text-left">
+            <thead><tr className="border-b-2 border-ink">{["", "Embroidery", "Screen printing", "DTF", "Vinyl"].map((h) => <th key={h} scope="col" className="label py-3 pr-4">{h || <span className="sr-only">Factor</span>}</th>)}</tr></thead>
             <tbody>
-              {[["Best for", "Logos, crests, names on polos, fleece, caps", "Big designs, photos, event and crew tees"], ["Size", "Up to 10 cm chest, 30 cm back", "Up to the full back"], ["Colours", "Thread colours, usually up to [N]", "Flat colours by screen or full colour digitally"], ["Wear", "Stitched into the cloth; the usual choice where the garment is washed often", "Depends on ink, fabric and wash care: [PRINT CARE NOTE]"], ["Setup", "Digitising once: £[SETUP]", "Screens per colour: £[SCREEN CHARGE]; none for digital"], ["Minimum", "[MINIMUM ORDER]", "[MIN RUN] screen; one piece digital"]].map(([a, b, c]) => (
-                <tr key={a} className="border-b border-line align-top"><th scope="row" className="py-3 pr-4 font-semibold">{a}</th><td className="py-3 pr-4 text-mute">{b}</td><td className="py-3 text-mute">{c}</td></tr>
+              {COMPARE.map(([a, ...rest]) => (
+                <tr key={a} className="border-b border-line align-top"><th scope="row" className="min-h-11 py-3 pr-4 font-semibold">{a}</th>{rest.map((c, i) => <td key={i} className="py-3 pr-4 text-mute"><Nb>{c}</Nb></td>)}</tr>
               ))}
             </tbody>
           </table>
@@ -101,31 +157,29 @@ export function Services() {
         <div className="flex flex-col gap-4">
           <Van size={36} className="text-rust" />
           <h2 className="text-[32px] sm:text-[44px]">Workwear supply</h2>
-          <p className="text-[17px]">Plain or decorated, we supply the garments too: polos, tees, sweats, hoodies, fleece, softshells, hi-vis, caps, beanies and aprons from [BRANDS STOCKED]. Sizes from kids to 5XL. One polo or a van load.</p>
-          <p className="text-mute">Twelve sample garments are on the site now; the full range comes with the client's supplier list.</p>
+          <p className="text-[17px]">We supply the garments too, plain or decorated: polos, tees, sweats, hoodies, fleece, softshells, hi-vis, caps, beanies and aprons. Brands: [BRANDS STOCKED]. One polo or a van load.</p>
+          <p className="text-mute">Twelve sample garments are on the site now. The full range is coming.</p>
           <Link to="/garments" className="btn btn-ink self-start">See the garments</Link>
         </div>
-        <img src={img("products/swatches")} alt="Cloth swatches in charcoal, navy, grey and green laid out on a table" loading="lazy" width="1100" height="825" className="aspect-[4/3] w-full rounded-pill border-2 border-ink object-cover" />
+        <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3]" />
       </section>
 
       <section id="uniforms" className="scroll-mt-24 on-ink bg-ink py-16 text-paper lg:py-20">
         <div className="wrap grid items-center gap-10 lg:grid-cols-2">
           <div className="flex flex-col gap-4">
             <Spool size={36} className="text-orange" />
-            <h2 className="text-[32px] text-paper sm:text-[44px]">Uniform programmes</h2>
-            <p className="text-[17px] text-paper-mute">For teams of ten to a thousand. We keep a spec per organisation: garments, colours, logo files, positions, who gets what. New starter? Send a size. Re-order? Send a number. [ACCOUNT TERMS].</p>
-            <ul className="grid gap-2 text-paper-mute sm:grid-cols-2">
-              {["One saved spec per team, role or site", "Named items and sizes held on file", "Roll-out by department or location", "Repeat orders in [REORDER TURNAROUND]"].map((x) => <li key={x} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 bg-orange" aria-hidden="true" />{x}</li>)}
-            </ul>
-            <Link to="/quote" className="btn btn-orange self-start">Start a programme</Link>
+            <h2 className="text-[32px] text-paper sm:text-[44px]">Uniforms</h2>
+            <p className="text-[17px] text-paper-mute">For a team of three or a whole school. We keep your spec on file: garments, colours, logo files, positions, who gets what. New starter? Send a size. Re-order? Send a number.</p>
+            <Bullets onInk items={["One saved spec per team, role or site", "Names and sizes held on file", "Roll out by department or location", `Every order ready ${SITE.turnaround}`]} />
+            <Link to="/quote" className="btn btn-orange self-start">Start a uniform</Link>
           </div>
           <div className="rounded-pill border-2 border-paper-mute p-5">
             <p className="label text-paper-mute">Sample uniform spec</p>
-            <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-              {[["Organisation", "[CLIENT]"], ["Garments", "Classic polo (navy), Softshell (black), Hi-vis waistcoat"], ["Logo", "Left chest, embroidered, 9 cm; back print on hi-vis"], ["Names", "Right chest, embroidered, block capitals"], ["Roles", "Site: all three. Office: polo only"]].map(([k, v]) => <div key={k} className="contents"><dt className="font-semibold">{k}</dt><dd className="text-paper-mute">{v}</dd></div>)}
+            <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2">
+              {[["Who", "[CLIENT]"], ["Garments", "Classic polo (navy), softshell (black), hi-vis waistcoat"], ["Logo", "Left chest, embroidered; back print on hi-vis"], ["Names", "Right chest, embroidered"], ["Roles", "Site: all three. Office: polo only"]].map(([k, v]) => <div key={k} className="contents"><dt className="font-semibold">{k}</dt><dd className="text-paper-mute">{v}</dd></div>)}
             </dl>
-            <div className="mt-5 flex gap-2">
-              {(["classic-polo", "softshell-jacket", "hi-vis-vest"] as const).map((h, i) => { const g = store.garment(h)!; return <Garment key={h} kind={g.kind} colour={["#1e2a44", "#1f1d1b", "#e7f23a"][i]} positions={i === 2 ? ["left-chest"] : ["left-chest", "right-chest"]} title={g.title} className="w-1/3" />; })}
+            <div className="mt-5 grid grid-cols-3 gap-2">
+              {(["classic-polo", "softshell-jacket", "hi-vis-vest"] as const).map((h, i) => { const g = store.garment(h)!; return <div key={h} className="rounded-pill bg-stone p-1"><Garment kind={g.kind} colour={["#1e2a44", "#1f1d1b", "#e7f23a"][i]} positions={i === 2 ? ["back"] : ["left-chest", "right-chest"]} view={i === 2 ? "back" : "front"} title={g.title} className="w-full" /></div>; })}
             </div>
           </div>
         </div>

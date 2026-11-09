@@ -46,15 +46,17 @@ const cats = cat.categories.map((c) => `- ${c.title}: ${c.blurb}`).join("\n");
 const garments = cat.garments.map((g) => `- [${g.title}](${SITE}/garments/${g.handle}): ${g.blurb} ${g.methods.join(" or ")}.`).join("\n");
 writeFileSync(join(dist, "llms.txt"), `# The London Logo Lab
 
-> Embroidery, print, custom workwear and uniforms from a workshop in Tooting, South London. Polos, t-shirts, sweatshirts, hoodies, fleece, softshell jackets, hi-vis, caps, beanies and aprons, decorated with the customer's logo by embroidery or print. The site's quote builder shows a live flat mock-up of the chosen garment with the logo positions marked and a sample estimate by quantity band (1 to 9, 10 to 24, 25 to 49, 50+).
+> Embroidery, screen printing, DTF printing, vinyl, workwear supply and uniforms from a workshop in Tooting, South London, for trades, schools and sports clubs. Minimum order 1 item; turnaround within 7 days; priced per item or by quote. Polos, t-shirts, sweatshirts, hoodies, fleece, softshell jackets, hi-vis, caps, beanies and aprons, decorated with the customer's logo. The site's quote builder shows a live flat mock-up of the chosen garment with the logo positions marked and a sample estimate by quantity band (1 to 9, 10 to 24, 25 to 49, 50+).
 
-Note: this site is a concept preview. Garments are samples, prices are a labelled sample formula, and quote sending opens at launch. Address, phone, minimums, turnaround and prices are placeholders until the business confirms them. Written to be readable by people and by AI search.
+Note: this site is a concept preview. Garments are samples, prices are a labelled sample formula, and quote sending opens at launch. Address, phone, setup charges and prices are placeholders until the business confirms them. Written to be readable by people and by AI search.
 
 ## Services
-- [Embroidery](${SITE}/services#embroidery): digitised logos stitched on chest, sleeve, back, cap and apron positions
-- [Print](${SITE}/services#print): screen and digital print for tees, hoodies, hi-vis and event runs
+- [Embroidery](${SITE}/services#embroidery): logos stitched on chest, sleeve, back, cap and apron positions
+- [Screen printing](${SITE}/services#screen): flat-colour prints, best value on bigger runs
+- [DTF printing](${SITE}/services#dtf): full-colour heat transfers, good from one piece
+- [Vinyl](${SITE}/services#vinyl): cut vinyl for names, numbers and short text
 - [Workwear supply](${SITE}/services#workwear): plain or decorated garments, kids to 5XL
-- [Uniform programmes](${SITE}/services#uniforms): a saved spec per team for repeat orders
+- [Uniforms](${SITE}/services#uniforms): a saved spec per team for repeat orders
 - [Schools and clubs](${SITE}/schools-and-clubs): PE kit, team kits, club and leavers' hoodies
 
 ## Garment categories
@@ -64,7 +66,7 @@ ${cats}
 ${garments}
 
 ## Tools
-- [Quote builder](${SITE}/quote): garment, colour, quantity, decoration, positions, logo upload, live mock-up, sample estimate
+- [Quote builder](${SITE}/quote): garment, colour, quantity, decoration, positions, logo upload, live mock-up, sample per-item estimate, or ask for a quote
 - [About and visit](${SITE}/about): the workshop in Tooting
 `);
 console.log(`prerendered ${n} routes, sitemap + llms.txt written`);
