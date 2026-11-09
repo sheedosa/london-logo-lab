@@ -24,6 +24,7 @@ export const SITE = {
   turnaround: "within 7 days",
   pricing: "Priced per item, or by quote",
   toConfirm: [
+    "service promises to confirm: spec kept on file for re-orders; a proof before anything is made; decorating garments from most UK workwear suppliers",
     "legal entity name, company number and VAT number",
     "workshop address, phone, email and opening hours",
     "garment range, brands stocked and colours offered",
