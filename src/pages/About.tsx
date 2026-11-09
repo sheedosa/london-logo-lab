@@ -62,7 +62,7 @@ export function About() {
             </dl>
             <h3 className="mt-4 text-lg">What to bring</h3>
             <p className="text-mute">Your logo, on your phone is fine. A garment you like, if you have one. A rough number, even if it's one. We'll do the rest at the counter, or you can <Link to="/quote" className="underline">build the quote first</Link> and bring the summary.</p>
-            <div className="mt-2 flex flex-wrap gap-3"><Link to="/quote" className="btn btn-ink">Build a quote</Link><a href={SITE.social.instagram} className="btn btn-ghost">Instagram</a></div>
+            <div className="mt-2 flex flex-wrap gap-3"><Link to="/quote" className="btn btn-ink">Build a quote</Link>{SITE.social.instagram.startsWith("http") && <a href={SITE.social.instagram} className="btn btn-ghost">Instagram</a>}</div>
           </div>
           <div className="flex flex-col gap-4">
             <div className="overflow-hidden rounded-pill border-2 border-ink"><AreaDiagram /></div>

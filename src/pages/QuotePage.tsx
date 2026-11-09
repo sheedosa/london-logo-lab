@@ -12,7 +12,7 @@ export function QuotePage() {
       <section className="wrap flex flex-col gap-4 pb-8 pt-10 sm:pt-14">
         <nav aria-label="Breadcrumb" className="text-[14px] text-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Quote builder</nav>
         <h1 className="text-[42px] sm:text-[64px]">Build your quote</h1>
-        <p className="max-w-2xl text-[17px] text-mute">Pick a garment, choose how it's decorated and where, and watch the mock-up change. We price per item, from {SITE.minimumOrder}, ready {SITE.turnaround}. Rather we priced it for you? <a href="#send" className="underline">Ask us for a quote</a>.</p>
+        <p className="max-w-2xl text-[17px] text-mute">Pick a garment, choose how it's decorated and where, and watch the mock-up change. We price per item, from {SITE.minimumOrder}, ready {SITE.turnaround}. Would you rather we priced it? <a href="#send" className="underline">Ask us for a quote</a>.</p>
       </section>
 
       <section className="wrap pb-16">

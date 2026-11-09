@@ -14,7 +14,7 @@ export const SITE = {
   family: [
     { name: "I&A Schoolwear", url: "https://sheedosa.github.io/iana-schoolwear/" },
     { name: "I&A Fashions", url: "https://sheedosa.github.io/iana-fashions/" },
-    { name: "I&A Tailoring", url: "https://sheedosa.github.io/iana-tailoring/" },
+    { name: "I&A Formal", url: "https://sheedosa.github.io/iana-tailoring/" },
   ],
   preview: true, // concept preview: sample garments, sample pricing formula, quote sending switched off
   // Confirmed by the client
@@ -41,7 +41,7 @@ export const SITE = {
 
 export const SECTORS = [
   { k: "trades", t: "Trades", d: "Polos, softshells and hi-vis with your name on the chest and the back. One van's worth or one jacket.", to: "/quote" },
-  { k: "schools", t: "Schools", d: "PE kit, staff wear and leavers' hoodies. Named, sized and bagged by class.", to: "/schools-and-clubs" },
+  { k: "schools", t: "Schools", d: "PE kit, staff wear and leavers' hoodies, with names on if you want them.", to: "/schools-and-clubs" },
   { k: "clubs", t: "Sports clubs", d: "Team kits with names and numbers, club hoodies, coaches' jackets.", to: "/schools-and-clubs" },
 ] as const;
 
