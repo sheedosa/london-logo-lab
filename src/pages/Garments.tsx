@@ -1,55 +1,79 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Seo, breadcrumbs } from "../components/Seo";
+import { Crumbs } from "../components/Crumbs";
 import { GarmentCard } from "../components/GarmentCard";
+import { TitleRule } from "../components/Icons";
 import { store, type Method } from "../lib/store";
 import { SITE } from "../data/site";
 
 export function Garments() {
-  const [category, setCategory] = useState("all");
-  const [method, setMethod] = useState<Method | null>(null);
-  const [filterOpen, setFilterOpen] = useState(false);
+  // Filter state lives in the address, so a filtered list can be linked to (the services page does) and survives Back.
+  const [params, setParams] = useSearchParams();
+  const category = store.category(params.get("in") ?? "")?.handle ?? "all";
+  const method = store.methods().find((m) => m.id === params.get("takes"))?.id ?? null;
+  const set = (next: { category?: string; method?: Method | null }) => {
+    const c = next.category ?? category, m = next.method === undefined ? method : next.method;
+    const p = new URLSearchParams();
+    if (c !== "all") p.set("in", c);
+    if (m) p.set("takes", m);
+    setParams(p, { replace: true, preventScrollReset: true });
+  };
   const list = store.garments({ category, method });
+  const groups = store.categories().map((c) => ({ c, items: list.filter((g) => g.category === c.handle) })).filter((x) => x.items.length);
+  const filtered = category !== "all" || method !== null;
   return (
     <>
       <Seo title="Garments: polos, tees, hoodies, hi-vis, caps and aprons" path="/garments" description="Twelve sample garments, from one item, The London Logo Lab decorates: polos, t-shirts, sweatshirts, hoodies, fleece, softshell, hi-vis, caps, beanies and aprons, with colours and logo positions for each."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Garments", path: "/garments" }]), { "@context": "https://schema.org", "@type": "CollectionPage", name: "Garments", description: "Sample garment range for embroidery and print." }]} />
 
-      <section className="wrap flex flex-col gap-4 pb-6 pt-10 sm:pt-14">
-        <nav aria-label="Breadcrumb" className="text-sm text-mute"><Link to="/" className="inline-flex min-h-11 items-center underline">Home</Link> · Garments</nav>
-        <h1 className="text-[44px] sm:text-[64px]">Garments</h1>
-        <p className="max-w-2xl text-[17px] text-mute">Twelve sample garments to show the range. Each one shows its colours, how it can be decorated and where your logo can go. Every garment from {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
-        <div className="flex flex-col gap-3 pt-2">
-          <div className="flex items-start gap-2">
-            <div className="-ml-4 flex min-w-0 flex-1 gap-2 overflow-x-auto pl-4 pr-1 sm:ml-0 sm:flex-wrap sm:pl-0" role="group" aria-label="Category">
-              {[{ handle: "all", title: "Everything" }, ...store.categories()].map((c) => <button key={c.handle} type="button" aria-pressed={c.handle === category} onClick={() => setCategory(c.handle)} className="chip">{c.title}</button>)}
-            </div>
-            <button type="button" aria-expanded={filterOpen} aria-controls="method-filter" onClick={() => setFilterOpen(!filterOpen)} className="chip shrink-0 gap-1.5 lg:hidden">
-              Filter{method ? " (1)" : ""}
-              <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" className={filterOpen ? "rotate-180" : ""}><path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" /></svg>
-            </button>
+      <section className="wrap flex flex-col gap-4 pb-6 pt-4 lg:pt-8">
+        <Crumbs trail={[{ to: "/", label: "Home" }]} here="Garments" />
+        <h1>Garments</h1>
+        <TitleRule className="text-rust" />
+        <p className="t-lede text-mute">Twelve sample garments to show the range. Each one shows its colours, how it can be decorated and where your logo can go. Every garment from {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
+      </section>
+
+      {/* Filters: both rows always visible, the chosen ones pressed */}
+      <section aria-label="Filters" className="border-y-2 border-ink">
+        <div className="wrap grid gap-x-6 gap-y-1 py-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
+          <p className="label pt-1 text-mute md:pt-0" id="f-cat">Show</p>
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-cat">
+            {[{ handle: "all", title: "Everything" }, ...store.categories()].map((c) => <button key={c.handle} type="button" aria-pressed={c.handle === category} onClick={() => set({ category: c.handle })} className="chip">{c.title}</button>)}
           </div>
-          <div id="method-filter" className={`${filterOpen ? "flex" : "hidden"} flex-wrap items-center gap-2 lg:flex`} role="group" aria-label="Decoration">
-            <span className="label mr-1 text-mute">Takes</span>
-            {store.methods().map((m) => <button key={m.id} type="button" aria-pressed={method === m.id} onClick={() => setMethod(method === m.id ? null : m.id)} className="chip">{m.label}</button>)}
+          <p className="label pt-1 text-mute md:pt-0" id="f-takes">That takes</p>
+          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-takes">
+            {store.methods().map((m) => <button key={m.id} type="button" aria-pressed={method === m.id} onClick={() => set({ method: method === m.id ? null : m.id })} className="chip">{m.label}</button>)}
           </div>
         </div>
       </section>
 
-      <section className="wrap pb-10">
-        <h2 className="sr-only">All garments</h2>
-        <p className="mb-5 text-mute" aria-live="polite">{list.length} {list.length === 1 ? "garment" : "garments"}{category !== "all" ? ` in ${store.category(category)?.title}` : ""}</p>
-        {list.length ? (
-          <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 lg:grid-cols-4">{list.map((g) => <GarmentCard key={g.handle} g={g} />)}</div>
-        ) : (
-          <div className="rounded-pill bg-stone p-8 text-center"><p>Nothing in that category takes that decoration.</p><button type="button" onClick={() => { setCategory("all"); setMethod(null); }} className="btn btn-ghost mt-4">Clear filters</button></div>
+      <section className="wrap pb-4 pt-6">
+        <h2 className="sr-only">Results</h2>
+        <p className="flex min-h-11 flex-wrap items-center gap-x-4" aria-live="polite">
+          <span><b>{list.length} {list.length === 1 ? "garment" : "garments"}</b>{category !== "all" ? ` in ${store.category(category)?.title}` : ""}{method ? ` that ${list.length === 1 ? "takes" : "take"} ${store.method(method).label.replace("Embroidery", "embroidery").replace("Screen", "screen").replace("Vinyl", "vinyl")}` : ""}</span>
+          {filtered && <button type="button" onClick={() => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true })} className="link">Clear filters</button>}
+        </p>
+        {groups.length ? groups.map(({ c, items }) => (
+          <div key={c.handle} className="grid gap-x-10 gap-y-5 border-t border-ink py-8 lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)] lg:py-10">
+            <div className="lg:sticky lg:top-28 lg:self-start">
+              <h3 className="t-section">{c.title}</h3>
+              <p className="mt-2 max-w-[28em] text-mute">{c.blurb}</p>
+            </div>
+            <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-8">{items.map((g) => <GarmentCard key={g.handle} g={g} />)}</div>
+          </div>
+        )) : (
+          <div className="flex flex-col items-start gap-3 border-t border-ink py-10">
+            <p className="t-sub">Nothing in {store.category(category)?.title ?? "that category"} takes {method ? store.method(method).label.toLowerCase().replace("dtf", "DTF") : "that decoration"}.</p>
+            <p className="text-mute">Try another decoration, or see everything.</p>
+            <button type="button" onClick={() => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true })} className="btn btn-ghost">Clear filters</button>
+          </div>
         )}
       </section>
 
-      <section className="wrap">
-        <div className="flex flex-col gap-4 rounded-pill bg-ink p-8 text-paper on-ink sm:flex-row sm:items-center sm:justify-between">
-          <div><h2 className="text-[28px] text-paper sm:text-[32px]">Not here? Tell us the brand and style code.</h2><p className="text-paper-mute">We decorate garments from most UK workwear suppliers, and your own if they are suitable: [OWN GARMENT POLICY].</p></div>
-          <Link to="/quote" className="btn btn-orange shrink-0">Build a quote</Link>
+      <section className="bg-stone">
+        <div className="wrap grid gap-6 py-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-center lg:py-16">
+          <div className="flex flex-col gap-3"><h2 className="max-w-[16em]">Not here? Tell us the brand and style code.</h2><p className="measure text-mute">We decorate garments from most UK workwear suppliers, and your own if they are suitable: [OWN GARMENT POLICY].</p></div>
+          <Link to="/quote" className="btn btn-ink self-start md:self-auto">Build a quote</Link>
         </div>
       </section>
     </>

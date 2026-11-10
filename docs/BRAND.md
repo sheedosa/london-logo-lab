@@ -15,7 +15,7 @@ Direction: **Bold workshop.** Confident, trade-friendly, reads on a van door and
 
 Five stitches on a square tile make an L: three down, the third turns the corner, two along the foot. It is the first letter of the strong word drawn with the first thing the workshop does. Round-capped strokes at 10% of the tile, gaps wide enough to survive 16px (favicon) and embroidery at 20mm. Tile corners are 5% of the edge; the full-bleed icon version is square.
 
-The marque is also the "position marker" idea on the site: the quote builder's dashed boxes show where the stitch goes.
+The marque is also the "position marker" idea on the site: the mock-up's dashed boxes show where the stitch goes, and the job ticket's tick is the marque tile with a thread tick.
 
 ## Lockups (`public/img/logo/`)
 
@@ -50,19 +50,22 @@ Orange-deep `#d9530f` is the hover state for orange buttons. No gradients. No al
 
 ## Type
 
-- **Archivo Black** (Google Fonts): wordmark, h1, h2, large numerals and prices. Sentence case for headings, upper case only in the wordmark and labels.
-- **Archivo** 400 to 700: body at 16px or larger, buttons (semibold, upper case, 0.12em), labels (semibold, upper case, 0.15em, 12px).
-- Loaded from Google Fonts in `index.html`; change `--font-display` and `--font-sans` in `src/index.css` only.
+- **Archivo Black** (Google Fonts): wordmark, the home hero, page titles (h1) and large numerals such as the ticket total. Set tight: tracking about -0.03em, leading 0.96 to 0.98. Never below 18px.
+- **Archivo** (variable, width and weight axes): section titles (h2) and other longer display lines at weight 800 and 88% width, so a sentence fits a phone in two or three lines; text at 400, emphasis at 500 or 600, always at normal width, 17px with 1.6 leading and lines of 45 to 75 characters.
+- The voice is friendly: sentence case everywhere (headings, buttons, links), short lines, plain workshop words. Upper case is kept for the wordmark, the lines of the job ticket, filter names and footer headings (12px, 0.15em).
+- One fluid scale lives in `src/index.css` (`--step-hero` to `--step-small`). Fonts load from Google Fonts in `index.html`; change `--font-display` and `--font-sans` in `src/index.css` only.
 
 ## Shapes and motion
 
-- Corners 3px everywhere (buttons, cards, inputs); the marque tile is the one exception at 5%.
-- Borders are 2px ink. Section dividers can be a running-stitch rule (`StitchRule`).
-- Decorative backgrounds: a 64px rule grid at 8–9% opacity on ink or orange heroes.
-- Motion only in response to a user action (hover colour, focus outline). `prefers-reduced-motion` is respected globally.
+- Corners 3px everywhere (buttons, tiles, inputs); the marque tile is the one exception at 5%.
+- Borders are 2px ink; rules between rows are 1px ink.
+- **The job ticket** is the site's signature: a paper ticket with a running-stitch border in orange (the marque's stitch), a perforated tear line above the total, the confirmed terms as a rust stamp in the header, and a stitched tick on each line once it is chosen. The stitch border appears only on the ticket; a short stitched rule sits under page titles. Nothing else is stitched.
+- No rule grids, gradients or drop shadows.
+- Motion answers an action: a ticket line opening, a tick stitching in, the drawing changing. The hero ticket arriving is the one unprompted moment. `prefers-reduced-motion` switches all motion off.
+- Focus: 2px ink ring with an orange halo on light grounds; 3px orange ring on ink.
 
 ## Illustration
 
-Flat garment drawings (`src/components/Garment.tsx`) in one 200×220 viewBox: cloth filled from the garment's colour list, 1.5px ink outline, seams at 55% in the contrast colour, hi-vis tape in a fixed silver. Logo positions are dashed orange boxes with a cross; uploaded artwork sits inside the box. Craft icons (`Icons.tsx`): needle, ink drop, spool, squeegee, registration mark, van, all 1.5px stroke.
+Flat garment drawings (`src/components/Garment.tsx`) in one 200×220 viewBox: cloth filled from the garment's colour list, 1.5px ink outline, seams at 55% in the contrast colour, hi-vis tape in a fixed silver. Logo positions are dashed orange boxes with a cross; uploaded artwork sits inside the box. Method close-ups (`MethodCloseUp.tsx`): one round loupe on the cloth showing the foot of the marque's L made four ways: satin stitch rows, screen mesh dots, a DTF film peeling, cut vinyl with the waste lifting. Same 1.5px ink outline and flat fills.
 
 Photos are limited to two per page and otherwise replaced by labelled photo slots in stone. No faces.

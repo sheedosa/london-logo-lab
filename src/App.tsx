@@ -22,7 +22,7 @@ export default function App() {
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <QuoteProvider>
         <ScrollTop />
-        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-pill focus:bg-orange focus:px-4 focus:py-3">Skip to content</a>
+        <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-xs focus:bg-orange focus:px-4 focus:py-3">Skip to content</a>
         <Header />
         <main id="main">
           <Routes>

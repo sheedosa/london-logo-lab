@@ -43,7 +43,7 @@ export function Marque({ className = "", tile = "#1b1916", thread = "#f4651f", s
   );
 }
 
-/** A long running-stitch rule used as a section divider. */
-export function StitchRule({ className = "" }: { className?: string }) {
-  return <svg className={className} height="4" width="100%" aria-hidden="true"><line x1="0" y1="2" x2="100%" y2="2" stroke="currentColor" strokeWidth="3" strokeDasharray="14 10" strokeLinecap="round" /></svg>;
+/** The one stitched rule outside the ticket: a short length of running stitch under a page title. */
+export function TitleRule({ className = "" }: { className?: string }) {
+  return <svg className={`title-rule ${className}`} aria-hidden="true"><line x1="2" y1="3" x2="100%" y2="3" /></svg>;
 }

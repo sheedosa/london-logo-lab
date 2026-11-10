@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
-/* The London Logo Lab identity: Bold workshop.
-   Ink (warm near-black) is the ground for hero, panels and footer; Paper (warm off-white) for working pages;
-   Orange (safety orange) is the one accent, used as a fill with Ink text or as text on Ink only.
-   Display: Archivo Black. Body and 0.15em uppercase labels: Archivo. Corners 3px. See docs/BRAND.md. */
+/* The London Logo Lab identity: Bold workshop, friendly voice.
+   Ink (warm near-black) is the ground for hero, bands and footer; Paper (warm off-white) for reading and for the
+   job ticket; Stone is the workbench the ticket lies on; Orange is the one accent (fill with Ink text, or on Ink).
+   Display: Archivo Black for the hero, page titles and numerals; Archivo 800 at 88% width for longer section lines.
+   Text: Archivo 400/500/600 at normal width. Corners 3px. See docs/BRAND.md. */
 @theme {
-  --font-display: "Archivo Black", "Archivo", Arial Black, sans-serif;
+  --font-display: "Archivo Black", "Archivo", "Arial Black", sans-serif;
   --font-sans: "Archivo", ui-sans-serif, system-ui, Arial, sans-serif;
   --color-ink: #1b1916;        /* ground and text */
   --color-ink-soft: #2e2a25;   /* hover on ink */
@@ -17,43 +18,192 @@
   --color-paper-mute: #c9c2b5; /* secondary text on ink: 9.9:1 */
   --color-orange: #f4651f;     /* accent: 5.6:1 against ink */
   --color-orange-deep: #d9530f;
-  --color-rust: #b54106;       /* orange for large text and icons on paper/stone: 4.9:1 on paper */
-  --radius-pill: 3px;
+  --color-rust: #b54106;       /* orange for stamps and icons on paper/stone: 4.9:1 on paper */
+  --radius-xs: 3px;
 }
 
-html { scroll-behavior: smooth; }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+:root {
+  /* One fluid scale. Pages use the .t-* classes (or bare h1/h2) and never set a heading size themselves. */
+  --step-hero: clamp(2.625rem, 1.6rem + 4.35vw, 5.5rem);      /* 42 to 88 */
+  --step-title: clamp(2.375rem, 1.65rem + 3.1vw, 4.25rem);    /* 38 to 68 */
+  --step-section: clamp(1.875rem, 1.42rem + 1.9vw, 3.125rem); /* 30 to 50 */
+  --step-sub: clamp(1.1875rem, 1.11rem + 0.34vw, 1.4375rem);  /* 19 to 23 */
+  --step-lede: clamp(1.125rem, 1.06rem + 0.3vw, 1.3125rem);   /* 18 to 21 */
+  --step-quote: clamp(1.375rem, 1.21rem + 0.7vw, 1.875rem);   /* 22 to 30 */
+  --step-body: 1.0625rem;                                      /* 17 */
+  --step-small: 0.875rem;                                      /* 14 */
+  --step-num: clamp(1.875rem, 1.6rem + 1.1vw, 2.5rem);              /* ticket total */
 
-/* Element rules and component classes live in layers so Tailwind utilities (font-sans, text sizes) always win. */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --dur-1: 160ms;
+  --dur-2: 420ms;
+  --dur-3: 760ms;
+  --header-h: 66px;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 240ms; }
+}
+
+/* Element rules and component classes live in layers so Tailwind utilities always win. */
 @layer base {
-  body { @apply bg-paper text-ink font-sans antialiased; font-size: 16px; font-weight: 400; line-height: 1.55; }
+  body { @apply bg-paper text-ink font-sans antialiased; font-size: var(--step-body); font-weight: 400; line-height: 1.6; font-stretch: 100%; }
   strong, b { font-weight: 600; }
-  h1, h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; text-wrap: balance; }
-  h3 { font-weight: 600; text-wrap: balance; }
+  h1, h2, h3 { text-wrap: balance; }
+  p, li, dd { text-wrap: pretty; }
+  /* Archivo Black is wide and loosely fitted: pull it in and set it almost solid. */
+  h1 { font-family: var(--font-display); font-weight: 400; font-size: var(--step-title); line-height: 0.98; letter-spacing: -0.028em; }
+  /* Longer lines: the text family at 800, slightly condensed, so a sentence still fits a phone in two or three lines. */
+  h2 { font-family: var(--font-sans); font-weight: 800; font-stretch: 88%; font-size: var(--step-section); line-height: 1.04; letter-spacing: -0.018em; }
+  h3 { font-weight: 600; font-size: var(--step-sub); line-height: 1.25; letter-spacing: -0.005em; }
+  a, button, summary, label { -webkit-tap-highlight-color: transparent; }
+  input, select, textarea { font-size: 1rem; }
 }
 
 @layer components {
-  .display { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.01em; line-height: 1.0; }
-  /* Labels are always the sans face, even on an h2 */
-  .label { font-family: var(--font-sans); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; line-height: 1.4; }
-  .wrap { @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8; }
+  .t-hero { font-family: var(--font-display); font-weight: 400; font-size: var(--step-hero); line-height: 0.96; letter-spacing: -0.03em; }
+  .t-title { font-family: var(--font-display); font-weight: 400; font-size: var(--step-title); line-height: 0.98; letter-spacing: -0.028em; }
+  .t-section { font-family: var(--font-sans); font-weight: 800; font-stretch: 88%; font-size: var(--step-section); line-height: 1.04; letter-spacing: -0.018em; }
+  .t-sub { font-family: var(--font-sans); font-weight: 600; font-stretch: 100%; font-size: var(--step-sub); line-height: 1.25; letter-spacing: -0.005em; }
+  .t-lede { font-size: var(--step-lede); line-height: 1.5; max-width: 34em; }
+  .t-quote { font-size: var(--step-quote); font-weight: 500; line-height: 1.3; letter-spacing: -0.008em; max-width: 26em; }
+  .t-small { font-size: var(--step-small); line-height: 1.5; }
+  /* Big figures: Archivo Black, tabular so a changing price does not jiggle. */
+  .t-num { font-family: var(--font-display); font-size: var(--step-num); line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .measure { max-width: 62ch; }
 
-  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-pill px-6 text-[0.8125rem] font-semibold uppercase tracking-[0.12em] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink; }
+  /* Caps labels: form lines on the ticket, table heads and footer headings only. Never above a heading. */
+  .label { font-family: var(--font-sans); font-stretch: 100%; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; line-height: 1.4; }
+  .wrap { @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8; }
+  .band { @apply py-14 sm:py-20 lg:py-24; }
+
+  .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xs px-5 text-base font-semibold; transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
   .btn-ink { @apply bg-ink text-paper hover:bg-ink-soft; }
   .btn-orange { @apply bg-orange text-ink hover:bg-orange-deep; }
   .btn-paper { @apply bg-paper text-ink hover:bg-stone; }
   .btn-outline-paper { @apply border-2 border-paper bg-transparent text-paper hover:bg-paper hover:text-ink; }
   .btn-ghost { @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
-  .chip { @apply inline-flex min-h-11 items-center rounded-pill border-2 border-ink bg-transparent px-4 text-[15px] font-medium whitespace-nowrap transition-colors; }
+  .link { @apply inline-flex min-h-11 items-center font-medium underline decoration-2 underline-offset-4; }
+
+  .chip { @apply inline-flex min-h-11 items-center rounded-xs border-2 border-ink bg-transparent px-3.5 text-base font-medium whitespace-nowrap; transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
   .chip[aria-pressed="true"], .chip[aria-current="page"] { @apply bg-ink text-paper; }
-  .chip .sub { color: var(--color-mute); }
+  .chip:disabled { @apply cursor-not-allowed border-line text-mute line-through; }
+  .chip .sub { color: var(--color-mute); font-size: var(--step-small); font-weight: 400; }
   .chip[aria-pressed="true"] .sub { color: var(--color-paper-mute); }
-  .field { @apply h-12 w-full rounded-pill border-2 border-ink bg-paper px-3 text-base; }
+  .field { @apply min-h-12 w-full rounded-xs border-2 border-ink bg-paper px-3 text-base; }
+  .field[aria-invalid="true"] { border-color: var(--color-rust); }
+  .swatch { @apply h-11 w-11 rounded-xs border-2 border-ink; }
+  .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--color-paper), 0 0 0 4px var(--color-ink); }
+
+  /* A ruled list of facts: term left, value right. Used for visit details, order details, the uniform spec. */
+  .ledger { display: grid; grid-template-columns: minmax(7rem, auto) minmax(0, 1fr); }
+  .ledger > div { display: contents; }
+  .ledger dt, .ledger dd { padding: 0.7rem 0; border-top: 1px solid var(--ledger-rule, var(--color-ink)); }
+  .ledger dt { font-weight: 600; padding-right: 1.5rem; }
+
+  /* ---- The job ticket: the site's one signature. The stitch border lives here and nowhere else. ---- */
+  .ticket { position: relative; color: var(--color-ink); --ground: var(--color-stone); --pad: 1.375rem; }
+  @media (min-width: 640px) { .ticket { --pad: 1.875rem; } }
+  .ticket-body, .ticket-stub { position: relative; background: var(--color-paper); padding: var(--pad); }
+  .ticket-body { border-radius: 3px 3px 0 0; padding-bottom: calc(var(--pad) - 0.5rem); }
+  .ticket-stub { border-radius: 0 0 3px 3px; padding-top: calc(var(--pad) - 0.25rem); }
+  /* Running stitch, the logo's own: round-capped dashes just inside the paper edge. */
+  .stitch { position: absolute; inset: 9px; width: calc(100% - 18px); height: calc(100% - 18px); overflow: visible; pointer-events: none; }
+  .stitch rect { fill: none; stroke: var(--color-orange); stroke-width: 2.5; stroke-dasharray: 8 8.5; stroke-linecap: round; }
+  /* The tear line: punched holes that show the bench through the paper, and a notch at each edge. */
+  .ticket-perf { position: relative; height: 14px; background-color: var(--color-paper); background-image: radial-gradient(circle, var(--ground) 0 3.2px, transparent 3.7px); background-size: 15px 14px; background-position: 50% 50%; background-repeat: repeat-x; }
+  .ticket-perf::before, .ticket-perf::after { content: ""; position: absolute; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: var(--ground); }
+  .ticket-perf::before { left: -9px; }
+  .ticket-perf::after { right: -9px; }
+
+  .ticket-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding-bottom: 0.875rem; }
+  .ticket-name { font-family: var(--font-display); font-size: 1.25rem; line-height: 1; letter-spacing: -0.02em; }
+  /* The confirmed terms, printed like a job number: a rubber stamp in the rust tone. */
+  .ticket-stamp { border: 2px solid var(--color-rust); color: var(--color-rust); border-radius: 3px; padding: 0.3rem 0.55rem; font-size: 0.75rem; font-weight: 700; line-height: 1.3; letter-spacing: 0.09em; text-transform: uppercase; transform: rotate(-1.5deg); text-align: left; }
+
+  .ticket-line { border-top: 1px solid var(--color-ink); }
+  .ticket-row { display: grid; grid-template-columns: 22px 6.5rem minmax(0, 1fr) 20px; align-items: center; column-gap: 0.625rem; width: 100%; min-height: 3.25rem; padding: 0.375rem 0; text-align: left; }
+  @media (min-width: 640px) { .ticket-row { grid-template-columns: 22px 7rem minmax(0, 1fr) 20px; } }
+  .ticket-value { display: flex; align-items: center; gap: 0.5rem; min-width: 0; font-weight: 600; line-height: 1.25; }
+  .ticket-value > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ticket-row .chev { transition: transform var(--dur-2) var(--ease-out); }
+  .ticket-line[data-open="true"] .chev { transform: rotate(180deg); }
+  .ticket-opts { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur-2) var(--ease-out); }
+  .ticket-line[data-open="true"] .ticket-opts { grid-template-rows: 1fr; }
+  .ticket-opts > div { min-height: 0; overflow: hidden; margin: 0 -6px; padding: 0 6px; }
+  .ticket-opts > div > div { padding: 0.25rem 0 1.125rem; }
+
+  /* The stitched tick: an empty dashed box until the line is chosen, then the marque's tile with a thread tick. */
+  .tick { width: 22px; height: 22px; flex: none; }
+  .tick .tile { fill: transparent; stroke: var(--color-mute); stroke-width: 1.25; stroke-dasharray: 2.6 2.6; transition: fill var(--dur-1) var(--ease-out); }
+  .tick .thread { fill: none; stroke: var(--color-orange); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 3.1 3.4; clip-path: inset(0 100% 0 0); }
+  .tick[data-on="true"] .tile { fill: var(--color-ink); stroke: var(--color-ink); stroke-dasharray: none; }
+  .tick[data-on="true"] .thread { clip-path: inset(0 0 0 0); transition: clip-path var(--dur-2) var(--ease-out) 60ms; }
+
+  .ticket-total { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; }
+  .band-btn { @apply flex min-h-12 flex-col items-center justify-center rounded-xs border-2 border-line px-1 text-center leading-tight; font-size: var(--step-small); transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out); }
+  .band-btn:hover { border-color: var(--color-ink); }
+  .band-btn[aria-pressed="true"] { @apply border-ink bg-ink text-paper; }
+
+  /* The mock-up panel the ticket sits beside. */
+  .mock { @apply rounded-xs border-2 border-ink bg-paper; }
+  .mock-swap { animation: mock-swap var(--dur-2) var(--ease-out) both; transform-origin: 50% 60%; }
+
+  /* The one unprompted moment: the hero ticket feeding out. */
+  .feed { animation: feed var(--dur-3) var(--ease-out) 120ms both; }
+
+  /* One stitched rule under a page title (the only stitch outside the ticket). */
+  .title-rule { display: block; width: min(100%, 11rem); height: 6px; overflow: visible; }
+  .title-rule line { stroke: currentColor; stroke-width: 3; stroke-dasharray: 12 11; stroke-linecap: round; }
+
+  /* Sticky action bar on phones. */
+  .bar { position: fixed; inset: auto 0 0 0; z-index: 30; transform: translateY(110%); transition: transform var(--dur-2) var(--ease-out); padding-bottom: env(safe-area-inset-bottom); }
+  .bar[data-show="true"] { transform: none; }
+
+  /* Horizontal rail with snap; bleeds to the right edge of the screen. */
+  .rail { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--color-ink) transparent; padding-bottom: 0.75rem; }
+  .rail > * { scroll-snap-align: start; flex: none; }
 }
 
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 2px solid var(--color-orange); outline-offset: 2px; }
-.on-ink a:focus-visible, .on-ink button:focus-visible, .on-ink input:focus-visible, .on-ink select:focus-visible { outline-color: var(--color-orange); }
+@keyframes feed { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes mock-swap { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 
-/* Thin rule grid used behind typographic heroes (decorative, aria-hidden in markup) */
-.rule-grid { background-image: linear-gradient(to right, rgba(243, 238, 228, 0.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(243, 238, 228, 0.09) 1px, transparent 1px); background-size: 64px 64px; }
-.rule-grid-ink { background-image: linear-gradient(to right, rgba(27, 25, 22, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(27, 25, 22, 0.08) 1px, transparent 1px); background-size: 64px 64px; }
+/* Focus: ink ring with an orange halo on light grounds, orange ring on ink. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; box-shadow: 0 0 0 5px var(--color-orange); }
+.on-ink a:focus-visible, .on-ink button:focus-visible, .on-ink input:focus-visible, .on-ink summary:focus-visible { outline: 3px solid var(--color-orange); box-shadow: none; }
+.on-orange a:focus-visible, .on-orange button:focus-visible { outline: 3px solid var(--color-ink); box-shadow: 0 0 0 6px var(--color-paper); }
+.on-ink .ticket a:focus-visible, .on-ink .ticket button:focus-visible, .on-ink .ticket input:focus-visible { outline: 2px solid var(--color-ink); box-shadow: 0 0 0 5px var(--color-orange); }
+
+/* ---- Services: the four methods as a comparison. Below lg each method is its own block with labelled rows;
+   from lg the four blocks sit side by side on shared rows (subgrid), with the row names in a rail on the left. ---- */
+.compare { display: grid; gap: 3rem; }
+.compare-rail { display: none; }
+.compare-col { display: grid; grid-template-columns: minmax(0, 1fr); }
+.compare-col dl > div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: 1rem; padding: 0.75rem 0; border-top: 1px solid var(--color-ink); }
+.compare-col dl > div:last-child { border-bottom: 1px solid var(--color-ink); }
+.compare-col dt { padding-top: 0.2rem; color: var(--color-mute); }
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .compare { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; }
+  .compare-col { grid-template-rows: subgrid; grid-row: span 9; }
+  .compare-col dl > div { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 1024px) {
+  .compare { grid-template-columns: 7.5rem repeat(4, minmax(0, 1fr)); column-gap: 1.75rem; row-gap: 0; }
+  .compare-rail, .compare-col { display: grid; grid-template-rows: subgrid; grid-row: 1 / span 9; }
+  .compare-rail > span { padding: 0.85rem 0; border-top: 1px solid var(--color-ink); color: var(--color-mute); }
+  .compare-rail > span:first-child, .compare-rail > span:last-child { border-top-color: transparent; }
+  .compare-rail > span:last-child { border-top: 1px solid var(--color-ink); }
+  .compare-col dl > div { display: block; padding: 0.75rem 0; }
+  .compare-col dl > div:last-child { border-bottom: 0; }
+  .compare-col footer { border-top: 1px solid var(--color-ink); }
+  .compare-col dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+@media (min-width: 1280px) { .compare { column-gap: 2.5rem; } }

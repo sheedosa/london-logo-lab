@@ -3,6 +3,9 @@ import { store, type Method, type PositionId } from "./store";
 
 // The quote the visitor is building, remembered on this device. At launch the same object is what gets sent
 // to the workshop (and could be saved against a customer account for re-orders).
+/** The lines of the job ticket. `done` records the ones the visitor has chosen for themselves. */
+export type LineId = "garment" | "colour" | "qty" | "method" | "positions" | "logo";
+export const LINES: LineId[] = ["garment", "colour", "qty", "method", "positions", "logo"];
 export type Logo = { kind: "image"; dataUrl: string; name: string } | { kind: "text"; text: string };
 export type Quote = {
   garment: string;
@@ -11,6 +14,7 @@ export type Quote = {
   method: Method;
   positions: PositionId[];
   logo: Logo | null;
+  done?: LineId[];
   contact: { name: string; org: string; email: string; notes: string };
 };
 
@@ -43,17 +47,20 @@ export function estimate(q: Pick<Quote, "garment" | "qty" | "method" | "position
 export const gbp = (n: number) => `£${n.toFixed(2)}`;
 
 export const DEFAULT_QUOTE: Quote = {
-  garment: "classic-polo", colour: "Navy", qty: 12, method: "embroidery", positions: ["left-chest"], logo: null,
+  garment: "classic-polo", colour: "Navy", qty: 12, method: "embroidery", positions: ["left-chest"], logo: null, done: [],
   contact: { name: "", org: "", email: "", notes: "" },
 };
 
 const KEY = "logolab-quote";
 const MAX_PERSISTED_LOGO = 400_000; // characters of data URL; bigger logos stay in memory only
 
-type Ctx = { quote: Quote; saved: boolean; update: (patch: Partial<Quote>) => void; reset: () => void };
-const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, saved: false, update: () => {}, reset: () => {} });
+type Ctx = { quote: Quote; saved: boolean; update: (patch: Partial<Quote>) => void; choose: (patch: Partial<Quote>, line: LineId) => void; reset: () => void };
+const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, saved: false, update: () => {}, choose: () => {}, reset: () => {} });
 
-function sanitise(q: Quote): Quote {
+/** Adds a ticket line to the list of lines the visitor has chosen. */
+export const mark = (done: LineId[] | undefined, line: LineId): LineId[] => (done?.includes(line) ? done : [...(done ?? []), line]);
+
+export function sanitise(q: Quote): Quote {
   const g = store.garment(q.garment);
   if (!g) return DEFAULT_QUOTE;
   const colour = g.colours.some((c) => c.name === q.colour) ? q.colour : g.colours[0].name;
@@ -63,7 +70,14 @@ function sanitise(q: Quote): Quote {
   const positions = (Array.isArray(q.positions) ? q.positions : []).filter((p) => allowed.includes(p));
   const logo = q.logo && (q.logo.kind === "text" ? typeof q.logo.text === "string" : typeof q.logo.dataUrl === "string") ? q.logo : null;
   const contact = { ...DEFAULT_QUOTE.contact, ...(q.contact ?? {}) };
-  return { ...q, colour, method, logo, contact, positions: positions.length ? positions : [allowed[0]], qty: Math.max(1, Math.min(5000, Math.round(q.qty) || 1)) };
+  // A tick only stays on a line whose value survived: if the garment changed and took the colour, the decoration
+  // or a position with it, that line goes back to unticked.
+  const dropped: LineId[] = [];
+  if (colour !== q.colour) dropped.push("colour");
+  if (method !== q.method) dropped.push("method");
+  if (!positions.length || positions.length !== (Array.isArray(q.positions) ? q.positions.length : 0)) dropped.push("positions");
+  const done = (Array.isArray(q.done) ? q.done : []).filter((l) => LINES.includes(l) && l !== "logo" && !dropped.includes(l));
+  return { ...q, colour, method, logo, contact, done, positions: positions.length ? positions : [allowed[0]], qty: Math.max(1, Math.min(5000, Math.round(q.qty) || 1)) };
 }
 
 export function QuoteProvider({ children }: { children: ReactNode }) {
@@ -79,8 +93,9 @@ export function QuoteProvider({ children }: { children: ReactNode }) {
     } catch { /* private mode or quota: the quote lives in memory for this visit */ }
   };
   const update = (patch: Partial<Quote>) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch }); persist(next); return { quote: next, saved: true }; });
+  const choose = (patch: Partial<Quote>, line: LineId) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch, done: mark(prev.quote.done, line) }); persist(next); return { quote: next, saved: true }; });
   const reset = () => { set({ quote: DEFAULT_QUOTE, saved: false }); try { localStorage.removeItem(KEY); } catch { /* ignore */ } };
-  return <QuoteContext.Provider value={{ quote, saved: state.saved, update, reset }}>{children}</QuoteContext.Provider>;
+  return <QuoteContext.Provider value={{ quote, saved: state.saved, update, choose, reset }}>{children}</QuoteContext.Provider>;
 }
 
 export const useQuote = () => useContext(QuoteContext);
