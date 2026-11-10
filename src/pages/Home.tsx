@@ -7,12 +7,13 @@ import { PhotoSlot } from "../components/PhotoSlot";
 import { VLink, garmentVT } from "../components/VLink";
 import { store, type Method } from "../lib/store";
 import { SECTORS, SITE, STEPS } from "../data/site";
+import { CONTACT } from "../lib/contact";
 
 const DECORATION: { id: Method; to: string; t: string; d: string }[] = [
-  { id: "embroidery", to: "/services#embroidery", t: "Embroidery", d: "Stitched logos that last. Polos, fleece, caps." },
-  { id: "screen", to: "/services#screen", t: "Screen printing", d: "Bold colours. Great value on bigger runs." },
-  { id: "dtf", to: "/services#dtf", t: "DTF printing", d: "Full colour and fine detail, even for one." },
-  { id: "vinyl", to: "/services#vinyl", t: "Vinyl", d: "Names and numbers, sharp and clean." },
+  { id: "embroidery", to: "/services#embroidery", t: "Embroidery", d: "Stitched logos and crests on polos, fleece and caps." },
+  { id: "screen", to: "/services#screen", t: "Screen printing", d: "Flat, solid ink in a few colours. Suits bigger runs." },
+  { id: "dtf", to: "/services#dtf", t: "DTF printing", d: "Full colour and fine detail, from one piece." },
+  { id: "vinyl", to: "/services#vinyl", t: "Vinyl", d: "Names, numbers and one-colour logos with clean edges." },
 ];
 
 export function Home() {
@@ -26,8 +27,8 @@ export function Home() {
       <section className="on-ink bg-ink text-paper">
         <div className="wrap grid gap-7 pb-10 pt-8 sm:pt-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:items-start lg:gap-12 lg:pb-14 lg:pt-10 xl:gap-16">
           <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:gap-7 lg:pt-4">
-            <h1 className="t-hero">Got a logo? We'll put it on your kit.</h1>
-            <p className="t-lede text-paper-mute">Polos, hoodies, hi-vis, caps and aprons. Stitched or printed in our Tooting workshop. You see it on the garment before you order.</p>
+            <h1 className="t-hero">We put your logo on workwear and kit.</h1>
+            <p className="t-lede text-paper-mute">Polos, hoodies, hi-vis, caps and aprons for trades, schools and sports clubs, made in our Tooting workshop. You see the logo on the garment before you order.</p>
             <p className="hidden max-w-[30em] text-paper-mute lg:block">Start the ticket here: pick a garment and how many. Your choices follow you to the full quote.</p>
           </div>
           <HeroTicket />
@@ -37,8 +38,8 @@ export function Home() {
       {/* Four ways to decorate, each with its close-up; the two supply services as plain lines underneath */}
       <section className="wrap band grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
         <div className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
-          <h2>Four ways to put a logo on.</h2>
-          <p className="measure text-mute">Not sure which? Tell us what it's for and we'll suggest one.</p>
+          <h2>Embroidery, screen printing, DTF and vinyl</h2>
+          <p className="measure text-mute">Tell us what the garment is for and we'll suggest which of the four suits it.</p>
           <Link to="/services" className="link self-start">Compare the four</Link>
         </div>
         <div>
@@ -62,8 +63,7 @@ export function Home() {
 
       {/* Who it's for. Three customers, three different compositions. */}
       <section className="wrap pb-10 sm:pb-14">
-        <h2 className="max-w-[14em]">Trades, schools and sports clubs.</h2>
-        <p className="t-lede mt-4">Need one shirt? That's fine. Need a whole squad? Also fine.</p>
+        <h2 className="max-w-[14em]">Who we make it for</h2>
       </section>
 
       {/* Trades: a full-bleed ink band, the jacket front and the hi-vis back side by side, large */}
@@ -146,22 +146,14 @@ export function Home() {
         </div>
       </section>
 
-      {/* A line from the workshop, beside the first photo slot */}
-      <section className="wrap band grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:items-center lg:gap-16">
-        <PhotoSlot shows="Finished embroidery on a navy fleece, close up." className="min-h-[260px] md:min-h-[340px]" />
-        <figure className="flex flex-col gap-4">
-          <blockquote className="t-quote">Bring your logo on your phone. We'll show you how it looks on the garment and help you choose thread or print. One shirt is never too small a job.</blockquote>
-          <figcaption className="text-mute">The team at {SITE.name}</figcaption>
-        </figure>
-      </section>
-
-      <section className="wrap">
-        <div className="grid gap-6 border-t-2 border-ink pt-10 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-          <div className="flex flex-col gap-3">
-            <h2>Come and see us in Tooting, South London.</h2>
-            <p className="text-mute">Address: {SITE.address}. Opening hours: {SITE.hours}.</p>
-          </div>
-          <Link to="/about" className="btn btn-ghost self-start md:self-auto">Visit the workshop</Link>
+      {/* The workshop: one photo slot, a plain note and where to find us */}
+      <section className="wrap band grid gap-8 !pb-0 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:items-center lg:gap-16">
+        <PhotoSlot shows="Finished embroidery on a navy fleece, close up." className="min-h-[260px] md:min-h-[340px]"><MethodCloseUp method="embroidery" decorative className="w-full" /></PhotoSlot>
+        <div className="flex flex-col gap-4">
+          <h2>Come and see us in {SITE.area}.</h2>
+          <p className="t-lede">Bring your logo on your phone. We'll show you how it looks on the garment and help you choose thread or print.</p>
+          <p className="text-mute">{CONTACT.address && CONTACT.hours ? `${CONTACT.address}. Open ${CONTACT.hours}.` : "The workshop address and opening hours are to come."}</p>
+          <Link to="/about" className="btn btn-ghost mt-2 self-start">About the workshop</Link>
         </div>
       </section>
     </>

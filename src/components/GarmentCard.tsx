@@ -17,7 +17,6 @@ export function GarmentCard({ g }: { g: G }) {
         <ul className="mt-1.5 flex flex-wrap items-center gap-1" aria-label={`Colours: ${g.colours.map((x) => x.name).join(", ")}`}>
           {g.colours.map((x) => <li key={x.name} className="h-3.5 w-3.5 rounded-[2px] border border-ink" style={{ backgroundColor: x.hex }} />)}
         </ul>
-        <p className="t-small mt-1 text-mute">from £[PRICE]</p>
       </div>
     </VLink>
   );

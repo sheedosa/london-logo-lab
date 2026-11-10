@@ -40,7 +40,7 @@ export const ORG_LD = {
 
 export function Seo({ title, description, path, image = "/img/og/og-home.jpg", type = "website", jsonLd, noindex }: Props) {
   useEffect(() => {
-    const full = path === "/" ? `${title} — ${SITE.name}` : `${title} | ${SITE.name}`;
+    const full = `${title} | ${SITE.name}`;
     document.title = full;
     const url = `${SITE.url}${path === "/" ? "/" : path}`;
     const img = absolute(image);

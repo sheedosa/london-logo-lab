@@ -3,7 +3,7 @@ import { Copy, Tick } from "./Icons";
 import { Mock, Ticket, TotalBar } from "./Ticket";
 import { LINES, summary, useQuote } from "../lib/quote";
 import { useOnScreen } from "../lib/useOnScreen";
-import { SITE } from "../data/site";
+import { CONTACT } from "../lib/contact";
 
 type Errors = Partial<Record<"name" | "email", string>>;
 
@@ -53,7 +53,7 @@ export function QuoteBuilder() {
 
         <form id="send" ref={sendRef} onSubmit={submit} noValidate className="flex scroll-mt-28 flex-col gap-4 rounded-xs border-2 border-ink bg-paper p-5 sm:p-7">
           <h2 className="t-sub">Send it to the workshop</h2>
-          <p className="text-mute">Happy with the estimate, or would you rather we priced it? Either way, leave your details and we'll come back with a price per item.</p>
+          <p className="text-mute">Leave your details and we'll come back with a price per item, whether or not you used the estimate.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {FIELDS.map((f) => { const err = f.k === "org" ? undefined : errors[f.k]; return (
               <div key={f.k} className={`flex flex-col gap-1 ${f.k === "email" ? "sm:col-span-2" : ""}`}>
@@ -72,7 +72,7 @@ export function QuoteBuilder() {
             {ready && (
               <div className="flex flex-col gap-3 rounded-xs bg-stone p-4">
                 <p className="font-semibold">Quote request ready; sending opens at launch.</p>
-                <p className="text-mute">Copy the summary below and email it to {SITE.email}, or bring it to the workshop. Your choices are saved on this device.</p>
+                <p className="text-mute">Copy the summary below and {CONTACT.email ? `email it to ${CONTACT.email}, or bring it to the workshop` : "bring it to the workshop; our email address is to come"}. Your choices are saved on this device.</p>
                 <label htmlFor={`${uid}-summary`} className="sr-only">Quote summary</label>
                 <textarea id={`${uid}-summary`} readOnly rows={9} value={text} className="field py-2 text-[0.9375rem]" />
                 <button type="button" onClick={copy} className="btn btn-ink self-start">{copied ? <Tick size={18} /> : <Copy size={18} />} {copied ? "Copied" : "Copy summary"}</button>

@@ -100,10 +100,7 @@ export function Schools() {
               {[["Minimum order", SITE.minimumOrder], ["Ready", SITE.turnaround], ["Parent ordering", "[PARENT ORDER OPTION]"], ["Names", "£[NAMING CHARGE] per name"], ["Numbers", "£[NUMBERING CHARGE] per number"]].map(([k, v]) => <div key={k}><dt>{k}</dt><dd className="text-mute"><Nb>{v}</Nb></dd></div>)}
             </dl>
           </div>
-          <figure className="text-mute">
-            <blockquote>[Client review, to come]</blockquote>
-            <figcaption className="t-small mt-1">[PE LEAD OR CLUB SECRETARY], [SCHOOL OR CLUB]</figcaption>
-          </figure>
+          <p className="text-mute">[Client review, to come]</p>
           <PhotoSlot shows="A rail of crested PE polos, sized small to large." className="min-h-[220px]" />
         </div>
       </section>

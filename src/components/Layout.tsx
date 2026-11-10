@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { SITE } from "../data/site";
+import { CONTACT, CONTACT_TO_COME, allKnown } from "../lib/contact";
 import { useQuote } from "../lib/quote";
 import { store } from "../lib/store";
 
@@ -72,12 +73,14 @@ export function Header() {
                 </ul>
                 <div className="flex flex-col gap-3">
                   <p className="font-semibold">The workshop, {SITE.area}</p>
-                  <dl className="ledger" style={{ ["--ledger-rule" as string]: "var(--color-line)" }}>
-                    <div><dt>Phone</dt><dd>{SITE.phone}</dd></div>
-                    <div><dt>Address</dt><dd>{SITE.address}</dd></div>
-                    <div><dt>Hours</dt><dd>{SITE.hours}</dd></div>
-                  </dl>
-                  <p className="text-mute">From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
+                  {(CONTACT.phone || CONTACT.address || CONTACT.hours) && (
+                    <dl className="ledger" style={{ ["--ledger-rule" as string]: "var(--color-line)" }}>
+                      {CONTACT.phone && <div><dt>Phone</dt><dd><a href={`tel:${CONTACT.phone}`} className="underline underline-offset-4">{CONTACT.phone}</a></dd></div>}
+                      {CONTACT.address && <div><dt>Address</dt><dd>{CONTACT.address}</dd></div>}
+                      {CONTACT.hours && <div><dt>Hours</dt><dd>{CONTACT.hours}</dd></div>}
+                    </dl>
+                  )}
+                  {!allKnown && <p className="text-mute">{CONTACT_TO_COME}</p>}
                 </div>
               </div>
             </nav>
@@ -116,15 +119,16 @@ export function Footer() {
         <div>
           <h2 className="label mb-2 text-paper-mute">Workshop</h2>
           <address className="flex flex-col gap-3 py-2.5 not-italic">
-            <p>{SITE.address}<br />{SITE.area}</p>
-            <p>{SITE.hours}</p>
-            <p>{SITE.phone}<br />{SITE.email}</p>
+            <p>{CONTACT.address && <>{CONTACT.address}<br /></>}{SITE.area}</p>
+            {CONTACT.hours && <p>{CONTACT.hours}</p>}
+            {(CONTACT.phone || CONTACT.email) && <p>{CONTACT.phone}{CONTACT.phone && CONTACT.email && <br />}{CONTACT.email}</p>}
+            {!allKnown && <p className="text-paper-mute">{CONTACT_TO_COME}</p>}
           </address>
         </div>
       </div>
       <div className="wrap flex flex-col gap-2 border-t border-ink-soft py-6 text-paper-mute lg:flex-row lg:items-baseline lg:justify-between lg:gap-8">
         <p className="t-small shrink-0">Part of the I&amp;A family: {SITE.family.map((f, i) => <span key={f.name} className="whitespace-nowrap"><a className="inline-flex min-h-11 items-center underline underline-offset-4" href={f.url}>{f.name}</a>{i < SITE.family.length - 1 && ", "}</span>)}</p>
-        <p className="t-small lg:text-right">© {SITE.legalName}, trading as {SITE.name}. Company no. [COMPANY NUMBER]. VAT [VAT NUMBER].{SITE.preview && " Concept preview: garments and prices are samples; quote sending opens at launch."}</p>
+        <p className="t-small lg:text-right">© {CONTACT.legalName ? `${CONTACT.legalName}, trading as ${SITE.name}` : SITE.name}.{SITE.preview && " Concept preview: garments and prices are samples; quote sending opens at launch."}</p>
       </div>
     </footer>
   );

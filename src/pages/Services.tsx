@@ -89,7 +89,7 @@ export function Services() {
             <p className="text-mute">Twelve sample garments are on the site now. The full range is coming.</p>
             <Link to="/garments" className="btn btn-ink mt-2 self-start">See the garments</Link>
           </div>
-          <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3]" />
+          <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3] !bg-paper" />
         </div>
       </section>
 

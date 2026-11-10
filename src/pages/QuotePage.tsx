@@ -17,7 +17,7 @@ export function QuotePage() {
             <Crumbs trail={[{ to: "/", label: "Home" }]} here="Quote builder" />
             <h1>Build your quote</h1>
             <TitleRule className="text-rust" />
-            <p className="t-lede">Fill in the ticket line by line and watch the mock-up change. We price per item, from {SITE.minimumOrder}, ready {SITE.turnaround}. Would you rather we priced it? <a href="#send" className="underline underline-offset-4">Ask us for a quote</a>.</p>
+            <p className="t-lede">Fill in the ticket line by line and watch the mock-up change. We price per item, from {SITE.minimumOrder}, ready {SITE.turnaround}. If you would rather we priced it, <a href="#send" className="underline underline-offset-4">ask us for a quote</a>.</p>
           </div>
           <QuoteBuilder />
         </div>

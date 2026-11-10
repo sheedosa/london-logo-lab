@@ -30,7 +30,7 @@ export function Garments() {
         <Crumbs trail={[{ to: "/", label: "Home" }]} here="Garments" />
         <h1>Garments</h1>
         <TitleRule className="text-rust" />
-        <p className="t-lede text-mute">Twelve sample garments to show the range. Each one shows its colours, how it can be decorated and where your logo can go. Every garment from {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
+        <p className="t-lede text-mute">Twelve sample garments to show the range. Each one shows its colours, how it can be decorated and where your logo can go. Every garment from {SITE.minimumOrder}, ready {SITE.turnaround}. Prices per garment are to come: from <span className="whitespace-nowrap">£[PRICE]</span>.</p>
       </section>
 
       {/* Filters: both rows always visible, the chosen ones pressed */}
@@ -72,7 +72,7 @@ export function Garments() {
 
       <section className="bg-stone">
         <div className="wrap grid gap-6 py-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-center lg:py-16">
-          <div className="flex flex-col gap-3"><h2 className="max-w-[16em]">Not here? Tell us the brand and style code.</h2><p className="measure text-mute">We decorate garments from most UK workwear suppliers, and your own if they are suitable: [OWN GARMENT POLICY].</p></div>
+          <div className="flex flex-col gap-3"><h2 className="max-w-[16em]">If it isn't here, tell us the brand and style code.</h2><p className="measure text-mute">We decorate garments from most UK workwear suppliers, and your own if they are suitable: [OWN GARMENT POLICY].</p></div>
           <Link to="/quote" className="btn btn-ink self-start md:self-auto">Build a quote</Link>
         </div>
       </section>
