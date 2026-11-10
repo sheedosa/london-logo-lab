@@ -24,7 +24,16 @@ export function Header() {
   useEffect(() => setOpen(false), [pathname]);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    const onKey = (e: KeyboardEvent) => {
+      const bar = document.querySelector<HTMLElement>("header");
+      if (e.key === "Escape") { setOpen(false); bar?.querySelector<HTMLElement>("button[aria-controls]")?.focus(); return; }
+      if (e.key !== "Tab" || !bar) return;
+      // Keep Tab inside the header and its open panel.
+      const stops = [...bar.querySelectorAll<HTMLElement>("a[href], button")].filter((el) => el.offsetParent !== null);
+      const first = stops[0], last = stops[stops.length - 1], at = document.activeElement;
+      if (e.shiftKey && (at === first || !bar.contains(at))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (at === last || !bar.contains(at))) { e.preventDefault(); first.focus(); }
+    };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
@@ -114,7 +123,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap flex flex-col gap-2 border-t border-ink-soft py-6 text-paper-mute lg:flex-row lg:items-baseline lg:justify-between lg:gap-8">
-        <p className="t-small shrink-0">Part of the I&amp;A family: {SITE.family.map((f, i) => <span key={f.name}>{i > 0 && ", "}<a className="inline-flex min-h-11 items-center underline underline-offset-4" href={f.url}>{f.name}</a></span>)}</p>
+        <p className="t-small shrink-0">Part of the I&amp;A family: {SITE.family.map((f, i) => <span key={f.name} className="whitespace-nowrap"><a className="inline-flex min-h-11 items-center underline underline-offset-4" href={f.url}>{f.name}</a>{i < SITE.family.length - 1 && ", "}</span>)}</p>
         <p className="t-small lg:text-right">© {SITE.legalName}, trading as {SITE.name}. Company no. [COMPANY NUMBER]. VAT [VAT NUMBER].{SITE.preview && " Concept preview: garments and prices are samples; quote sending opens at launch."}</p>
       </div>
     </footer>
