@@ -42,7 +42,7 @@ export function Services() {
       <section className="on-ink bg-ink text-paper">
         <div className="wrap flex flex-col gap-5 pb-12 pt-4 lg:pb-16 lg:pt-8">
           <Crumbs trail={[{ to: "/", label: "Home" }]} here="Services" className="text-paper-mute" />
-          <h1 className="max-w-[13em]">Everything your logo needs, under one roof.</h1>
+          <h1 className="max-w-[13em]">Embroidery, print and the garments to put them on.</h1>
           <TitleRule className="text-orange" />
           <p className="t-lede text-paper-mute">Four ways to decorate, plus the garments and the uniform plan. From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
           <nav aria-label="On this page" className="flex flex-wrap gap-x-6">
