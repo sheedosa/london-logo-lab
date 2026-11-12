@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type ChangeEvent, type ReactNode, type Ref } from "react";
+import { useEffect, useId, useRef, useState, type ChangeEvent, type ReactNode, type Ref } from "react";
 import { Link } from "react-router-dom";
 import { Garment, hasBack } from "./Garment";
 import { Marque, Upload } from "./Icons";
@@ -22,6 +22,34 @@ export function StitchTick({ on }: { on: boolean }) {
       <path className="thread" d="M5.6 11.6 L9.4 15.4 L16.6 6.6" />
     </svg>
   );
+}
+
+/** The quantity box. What is being typed is kept as typed (an empty box stays empty while the number is changed),
+ *  and the ticket takes each whole number as it appears; leaving the box shows the ticket's number again. */
+function QtyField({ id, qty, onQty }: { id: string; qty: number; onQty: (n: number) => void }) {
+  const [text, setText] = useState<string | null>(null);
+  return (
+    <input id={id} type="number" min={1} max={5000} step={1} inputMode="numeric" pattern="[0-9]*" autoComplete="off" enterKeyHint="done" className="field w-24"
+      value={text ?? String(qty)}
+      onFocus={(e) => e.currentTarget.select()}
+      onChange={(e) => { const t = e.target.value.replace(/\D/g, "").slice(0, 4); setText(t); const n = Number(t); if (n >= 1) onQty(n); }}
+      onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }}
+      onBlur={() => setText(null)} />
+  );
+}
+
+/** True while the visitor is typing in a field: the on-screen keyboard is up, so bottom bars step out of the way. */
+export function useTyping() {
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const el = document.activeElement;
+      setTyping(Boolean(el && (el.tagName === "TEXTAREA" || el.tagName === "SELECT" || (el.tagName === "INPUT" && !/^(file|checkbox|radio|button|submit|range)$/.test((el as HTMLInputElement).type)))));
+    };
+    document.addEventListener("focusin", check); document.addEventListener("focusout", check);
+    return () => { document.removeEventListener("focusin", check); document.removeEventListener("focusout", check); };
+  }, []);
+  return typing;
 }
 
 const LABEL: Record<LineId, string> = { garment: "Garment", colour: "Colour", qty: "How many", method: "Decoration", positions: "Where", logo: "Your logo" };
@@ -105,7 +133,7 @@ export function Ticket({ quote, choose, lines, quick, startOpen = null, ground =
     qty: (
       <div className="flex flex-wrap items-center gap-2">
         <label htmlFor={`${uid}-qty`} className="sr-only">Quantity</label>
-        <input id={`${uid}-qty`} type="number" min={1} max={5000} inputMode="numeric" value={quote.qty} onChange={(e) => choose({ qty: Number(e.target.value) }, "qty")} className="field w-24" />
+        <QtyField id={`${uid}-qty`} qty={quote.qty} onQty={(n) => choose({ qty: n }, "qty")} />
         {BANDS.map((b) => <button key={b.label} type="button" aria-pressed={bandFor(quote.qty) === b} onClick={() => choose({ qty: b.min }, "qty")} className="chip">{b.label}</button>)}
         <p className="t-small w-full text-mute">From {SITE.minimumOrder}. The price per item drops at each band.</p>
       </div>
@@ -136,7 +164,7 @@ export function Ticket({ quote, choose, lines, quick, startOpen = null, ground =
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor={`${uid}-text`} className="font-medium">Or type a name to see it placed</label>
-            <input id={`${uid}-text`} type="text" maxLength={24} autoComplete="off" autoCapitalize="characters" placeholder="e.g. HALE & SONS" value={quote.logo?.kind === "text" ? quote.logo.text : ""} onChange={(e) => choose({ logo: e.target.value ? { kind: "text", text: e.target.value } : null }, "logo")} className="field" />
+            <input id={`${uid}-text`} type="text" maxLength={24} autoComplete="off" autoCorrect="off" spellCheck={false} autoCapitalize="characters" enterKeyHint="done" onKeyDown={(e) => { if (e.key === "Enter") e.currentTarget.blur(); }} placeholder="e.g. HALE & SONS" value={quote.logo?.kind === "text" ? quote.logo.text : ""} onChange={(e) => choose({ logo: e.target.value ? { kind: "text", text: e.target.value } : null }, "logo")} className="field" />
           </div>
         </div>
         {fileError && <p role="alert" className="mt-2 font-medium">{fileError}</p>}
@@ -160,14 +188,14 @@ export function Ticket({ quote, choose, lines, quick, startOpen = null, ground =
           const isOpen = open === l;
           return (
             <div key={l} className="ticket-line" data-open={isOpen}>
-              <button type="button" className="ticket-row" aria-expanded={isOpen} aria-controls={`${uid}-${l}`} onClick={() => setOpen(isOpen ? null : l)}>
+              <button type="button" className="ticket-row" aria-expanded={isOpen} aria-controls={`${uid}-opts-${l}`} onClick={() => setOpen(isOpen ? null : l)}>
                 <StitchTick on={done(l)} />
                 <span className="label">{LABEL[l]}</span>
                 <span className="ticket-value">{value[l]}</span>
                 <svg className="chev" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 <span className="sr-only">{done(l) ? ", chosen" : ""}</span>
               </button>
-              <div className="ticket-opts" id={`${uid}-${l}`} role="group" aria-label={LABEL[l]} inert={!isOpen}>
+              <div className="ticket-opts" id={`${uid}-opts-${l}`} role="group" aria-label={LABEL[l]} inert={!isOpen}>
                 <div><div>{options[l]}</div></div>
               </div>
             </div>
@@ -208,15 +236,15 @@ export function Mock({ quote, vtName, className = "" }: { quote: Quote; vtName?:
   const canBack = hasBack(g.kind) && quote.positions.includes("back");
   const onlyBack = canBack && quote.positions.length === 1;
   const shown = canBack && (view === "back" || onlyBack) ? "back" : "front";
-  const caption = `${g.title} in ${colour.name}, ${store.method(quote.method).label.toLowerCase()} on the ${quote.positions.map((p) => store.position(p).label.toLowerCase()).join(" and ")}.`;
+  const caption = `${g.title} in ${colour.name}, ${store.method(quote.method).label.toLowerCase().replace("dtf", "DTF")} on the ${quote.positions.map((p) => store.position(p).label.toLowerCase()).join(" and ")}.`;
   return (
     <div className={`mock ${className}`}>
-      <div className={`grid items-center gap-x-4 p-3 md:block md:p-8 ${big ? "grid-cols-1" : "grid-cols-[112px_minmax(0,1fr)]"}`}>
-        <div key={g.handle} className="mock-swap" style={vtName ? { viewTransitionName: vtName } : undefined}>
+      <div className={`mock-strip grid items-center gap-x-4 p-3 md:block md:p-8 ${big ? "grid-cols-1" : "mock-strip-small grid-cols-[88px_minmax(0,1fr)]"}`}>
+        <div key={g.handle} className="mock-swap mock-art" style={vtName ? { viewTransitionName: vtName } : undefined}>
           <Garment kind={g.kind} colour={colour.hex} positions={quote.positions} logo={quote.logo} view={shown} title={g.title} className={`mx-auto w-full ${big ? "max-w-[300px]" : ""} md:max-w-[440px]`} />
         </div>
         <div className="flex flex-col gap-2 md:mt-4">
-          <p aria-live="polite" className="t-small md:text-base">{caption} <span className="text-mute">{quote.logo ? "Your artwork is shown at roughly the right size." : "Dashed boxes show where the logo goes."}</span></p>
+          <p aria-live="polite" className={`t-small md:not-sr-only md:text-base ${big ? "" : "max-[359px]:sr-only"}`}>{caption} <span className={`text-mute md:inline ${big ? "" : "hidden"}`}>{quote.logo ? "Your artwork is shown at roughly the right size." : "Dashed boxes show where the logo goes."}</span></p>
           <div className="flex flex-wrap gap-2">
             {canBack && !onlyBack && (
               <div className="flex gap-1.5" role="group" aria-label="View">
@@ -236,10 +264,12 @@ export function Mock({ quote, vtName, className = "" }: { quote: Quote; vtName?:
  *  (the real total and buttons) is not. */
 export function TotalBar({ quote, show, children }: { quote: Quote; show: boolean; children: ReactNode }) {
   const est = estimate(quote)!;
+  const typing = useTyping();
+  show = show && !typing;
   return (
     <div className="bar border-t-2 border-ink bg-paper md:hidden" data-show={show} inert={!show}>
-      <div className="flex min-h-16 items-center justify-between gap-3 px-4 py-2">
-        <p className="flex flex-col leading-tight"><span className="t-small text-mute">Sample estimate</span><span><b className="text-[1.125rem]">from {gbp(est.perItem)}</b> per item</span></p>
+      <div className="flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-1.5">
+        <p className="mr-auto flex flex-col leading-tight"><span className="t-small text-mute">Sample estimate</span><span className="whitespace-nowrap"><b className="text-[1.125rem]">from {gbp(est.perItem)}</b> per item</span></p>
         {children}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Seo, breadcrumbs } from "../components/Seo";
 import { Crumbs } from "../components/Crumbs";
@@ -19,11 +19,15 @@ export function GarmentPage() {
 }
 
 function Detail({ g }: { g: G }) {
-  const { quote, update } = useQuote();
+  const { quote, update, ready } = useQuote();
   // A ticket started for this garment. It stays on this page until "Quote this garment" writes it to the saved quote.
   const [draft, setDraft] = useState<Quote>(() => quote.garment === g.handle ? quote
     : sanitise({ ...DEFAULT_QUOTE, garment: g.handle, colour: g.colours[Math.min(1, g.colours.length - 1)].name, method: g.methods[0], positions: [], qty: quote.qty, done: [] }));
-  const choose = (patch: Partial<Quote>, line: LineId) => setDraft((d) => sanitise({ ...d, ...patch, done: mark(d.done, line) }));
+  // The saved quote is read after the first render; if it is for this garment and nothing has been chosen here
+  // yet, the ticket picks it up.
+  const touched = useRef(false);
+  useLayoutEffect(() => { if (ready && !touched.current && quote.garment === g.handle) setDraft(quote); }, [ready]); // eslint-disable-line react-hooks/exhaustive-deps
+  const choose = (patch: Partial<Quote>, line: LineId) => { touched.current = true; setDraft((d) => sanitise({ ...d, ...patch, done: mark(d.done, line) })); };
   const start = () => update({ garment: g.handle, colour: draft.colour, method: draft.method, positions: draft.positions, qty: draft.qty, done: mark(draft.done, "garment") });
   const benchRef = useRef<HTMLDivElement>(null), stubRef = useRef<HTMLDivElement>(null);
   const benchOn = useOnScreen(benchRef, false), stubOn = useOnScreen(stubRef);
@@ -50,7 +54,7 @@ function Detail({ g }: { g: G }) {
           </div>
 
           <div ref={benchRef} className="md:grid md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-start md:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12">
-            <div className="sticky top-[var(--header-h)] z-20 -mx-4 sm:-mx-8 md:top-24 md:mx-0">
+            <div className="pin -mx-4 sm:-mx-8 md:mx-0">
               <Mock quote={draft} vtName={`garment-${g.handle}`} className="max-md:rounded-none max-md:border-x-0 max-md:border-t-0" />
               <p className="t-small mt-2 hidden text-mute md:block">Flat drawing of a sample garment.</p>
             </div>
@@ -86,7 +90,7 @@ function Detail({ g }: { g: G }) {
       </section>
 
       <TotalBar quote={draft} show={benchOn && !stubOn}>
-        <VLink to="/quote" onClick={start} className="btn btn-orange min-h-11 px-4">Quote this garment</VLink>
+        <VLink to="/quote" onClick={start} className="btn btn-orange min-h-11 min-w-0 max-w-[13rem] flex-1 px-4 text-center leading-tight">Quote this garment</VLink>
       </TotalBar>
     </>
   );

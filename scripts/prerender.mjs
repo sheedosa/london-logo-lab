@@ -1,6 +1,7 @@
 // Post-build: render every route to static HTML inside dist/ so GitHub Pages serves real pages
 // (titles, meta, JSON-LD and content) to Google, social scrapers and AI search. Also writes sitemap.xml and llms.txt.
 import { chromium } from "playwright";
+import { createServer as createVite } from "vite";
 import { createServer } from "node:http";
 import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync } from "node:fs";
 import { join, extname } from "node:path";
@@ -13,32 +14,41 @@ const cat = JSON.parse(readFileSync(new URL("../src/data/garments.json", import.
 const routes = ["/", "/services", "/garments", "/quote", "/schools-and-clubs", "/about",
   ...cat.garments.map((g) => `/garments/${g.handle}`)];
 
-const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".json": "application/json", ".ico": "image/x-icon", ".txt": "text/plain", ".xml": "application/xml", ".webmanifest": "application/manifest+json" };
+// The page body is rendered by React on the server (src/entry-server.tsx), so the browser can hydrate it in place.
+// The browser pass below only supplies each route's <head> (title, meta, canonical, JSON-LD set by <Seo>).
+const vite = await createVite({ server: { middlewareMode: true }, appType: "custom", logLevel: "error" });
+const { render } = await vite.ssrLoadModule("/src/entry-server.tsx");
+const template = readFileSync(join(dist, "index.html"), "utf8"); // the built shell, before any route overwrites it
+
+const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".webp": "image/webp", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".json": "application/json", ".ico": "image/x-icon", ".txt": "text/plain", ".xml": "application/xml", ".webmanifest": "application/manifest+json", ".woff2": "font/woff2" };
 const server = createServer((req, res) => {
   let p = decodeURIComponent(req.url.split("?")[0]).replace(BASE, "") || "/";
   let f = join(dist, p);
-  if (!existsSync(f) || statSync(f).isDirectory()) f = join(dist, "index.html");
-  res.setHeader("Content-Type", types[extname(f)] ?? "application/octet-stream");
-  res.end(readFileSync(f));
+  const file = existsSync(f) && !statSync(f).isDirectory();
+  res.setHeader("Content-Type", file ? types[extname(f)] ?? "application/octet-stream" : "text/html");
+  res.end(file ? readFileSync(f) : template);
 }).listen(0);
 const PORT = server.address().port;
 
 const exe = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE || (existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : undefined);
 const browser = await chromium.launch(exe ? { executablePath: exe } : {});
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-page.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort()); // fonts aren't needed for markup
 let n = 0;
 for (const r of routes) {
   await page.goto(`http://localhost:${PORT}${BASE}${r}`, { waitUntil: "networkidle" });
   await page.waitForFunction(() => document.querySelector("h1") && !document.body.innerText.includes("Loading"), null, { timeout: 10000 }).catch(() => {});
   let html = await page.content();
   html = html.replace("<html", '<html data-prerendered="1"'); // informational only
+  // Swap the browser-rendered body for the server-rendered one; `data-page` tells main.tsx it can hydrate.
+  const a = html.indexOf('<div id="root">'), b = html.lastIndexOf("</body>");
+  if (a < 0 || b < 0) throw new Error(`prerender: no root in ${r}`);
+  html = html.slice(0, a) + `<div id="root" data-page="${r}">${render(r)}</div>\n  ` + html.slice(b);
   const out = r === "/" ? join(dist, "index.html") : join(dist, r.slice(1), "index.html");
   mkdirSync(join(out, ".."), { recursive: true });
   writeFileSync(out, "<!doctype html>\n" + html.replace(/^<!doctype html>\s*/i, ""));
   n++;
 }
-await browser.close(); server.close();
+await browser.close(); server.close(); await vite.close();
 
 const today = new Date().toISOString().slice(0, 10);
 writeFileSync(join(dist, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map((r) => `  <url><loc>${SITE}${r === "/" ? "/" : r}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${r === "/" ? "1.0" : r === "/quote" || r === "/garments" ? "0.9" : "0.7"}</priority></url>`).join("\n")}\n</urlset>\n`);

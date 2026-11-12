@@ -37,11 +37,11 @@ export function Garments() {
       <section aria-label="Filters" className="border-y-2 border-ink">
         <div className="wrap grid gap-x-6 gap-y-1 py-3 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
           <p className="label pt-1 text-mute md:pt-0" id="f-cat">Show</p>
-          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-cat">
+          <div className="chips-x -mx-4 flex gap-2 px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-cat">
             {[{ handle: "all", title: "Everything" }, ...store.categories()].map((c) => <button key={c.handle} type="button" aria-pressed={c.handle === category} onClick={() => set({ category: c.handle })} className="chip">{c.title}</button>)}
           </div>
           <p className="label pt-1 text-mute md:pt-0" id="f-takes">That takes</p>
-          <div className="-mx-4 flex gap-2 overflow-x-auto px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-takes">
+          <div className="chips-x -mx-4 flex gap-2 px-4 py-1.5 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-labelledby="f-takes">
             {store.methods().map((m) => <button key={m.id} type="button" aria-pressed={method === m.id} onClick={() => set({ method: method === m.id ? null : m.id })} className="chip">{m.label}</button>)}
           </div>
         </div>

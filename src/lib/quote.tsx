@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useState, type ReactNode } from "react";
 import { store, type Method, type PositionId } from "./store";
 
 // The quote the visitor is building, remembered on this device. At launch the same object is what gets sent
@@ -54,8 +54,8 @@ export const DEFAULT_QUOTE: Quote = {
 const KEY = "logolab-quote";
 const MAX_PERSISTED_LOGO = 400_000; // characters of data URL; bigger logos stay in memory only
 
-type Ctx = { quote: Quote; saved: boolean; update: (patch: Partial<Quote>) => void; choose: (patch: Partial<Quote>, line: LineId) => void; reset: () => void };
-const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, saved: false, update: () => {}, choose: () => {}, reset: () => {} });
+type Ctx = { quote: Quote; saved: boolean; /** True once the quote saved on this device has been read. */ ready: boolean; update: (patch: Partial<Quote>) => void; choose: (patch: Partial<Quote>, line: LineId) => void; reset: () => void };
+const QuoteContext = createContext<Ctx>({ quote: DEFAULT_QUOTE, saved: false, ready: false, update: () => {}, choose: () => {}, reset: () => {} });
 
 /** Adds a ticket line to the list of lines the visitor has chosen. */
 export const mark = (done: LineId[] | undefined, line: LineId): LineId[] => (done?.includes(line) ? done : [...(done ?? []), line]);
@@ -82,9 +82,14 @@ export function sanitise(q: Quote): Quote {
 
 export function QuoteProvider({ children }: { children: ReactNode }) {
   // `saved` is true once the visitor has made a choice (now or on an earlier visit); the header strip keys off it.
-  const [state, set] = useState<{ quote: Quote; saved: boolean }>(() => {
-    try { const v = localStorage.getItem(KEY); return v ? { quote: sanitise({ ...DEFAULT_QUOTE, ...(JSON.parse(v) as Partial<Quote>) }), saved: true } : { quote: DEFAULT_QUOTE, saved: false }; } catch { return { quote: DEFAULT_QUOTE, saved: false }; }
-  });
+  // The first render is always the default ticket, the same one the prerendered page shows, so the page is taken
+  // over without a mismatch. The quote saved on this device is read straight after, before the browser paints.
+  const [state, set] = useState<{ quote: Quote; saved: boolean; ready: boolean }>({ quote: DEFAULT_QUOTE, saved: false, ready: false });
+  useLayoutEffect(() => {
+    let next = { quote: DEFAULT_QUOTE, saved: false };
+    try { const v = localStorage.getItem(KEY); if (v) next = { quote: sanitise({ ...DEFAULT_QUOTE, ...(JSON.parse(v) as Partial<Quote>) }), saved: true }; } catch { /* unreadable: start a new ticket */ }
+    set((prev) => (prev.ready ? prev : { ...next, ready: true }));
+  }, []);
   const quote = state.quote;
   const persist = (q: Quote) => {
     try {
@@ -92,10 +97,10 @@ export function QuoteProvider({ children }: { children: ReactNode }) {
       localStorage.setItem(KEY, JSON.stringify({ ...q, logo }));
     } catch { /* private mode or quota: the quote lives in memory for this visit */ }
   };
-  const update = (patch: Partial<Quote>) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch }); persist(next); return { quote: next, saved: true }; });
-  const choose = (patch: Partial<Quote>, line: LineId) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch, done: mark(prev.quote.done, line) }); persist(next); return { quote: next, saved: true }; });
-  const reset = () => { set({ quote: DEFAULT_QUOTE, saved: false }); try { localStorage.removeItem(KEY); } catch { /* ignore */ } };
-  return <QuoteContext.Provider value={{ quote, saved: state.saved, update, choose, reset }}>{children}</QuoteContext.Provider>;
+  const update = (patch: Partial<Quote>) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch }); persist(next); return { quote: next, saved: true, ready: true }; });
+  const choose = (patch: Partial<Quote>, line: LineId) => set((prev) => { const next = sanitise({ ...prev.quote, ...patch, done: mark(prev.quote.done, line) }); persist(next); return { quote: next, saved: true, ready: true }; });
+  const reset = () => { set({ quote: DEFAULT_QUOTE, saved: false, ready: true }); try { localStorage.removeItem(KEY); } catch { /* ignore */ } };
+  return <QuoteContext.Provider value={{ quote, saved: state.saved, ready: state.ready, update, choose, reset }}>{children}</QuoteContext.Provider>;
 }
 
 export const useQuote = () => useContext(QuoteContext);

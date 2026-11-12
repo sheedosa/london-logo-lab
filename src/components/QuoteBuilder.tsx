@@ -1,4 +1,5 @@
 import { useId, useRef, useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { Copy, Tick } from "./Icons";
 import { Mock, Ticket, TotalBar } from "./Ticket";
 import { LINES, summary, useQuote } from "../lib/quote";
@@ -41,30 +42,30 @@ export function QuoteBuilder() {
 
   return (
     <div ref={benchRef} className="md:grid md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] md:items-start md:gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:gap-12">
-      <Mock quote={quote} vtName="mock" className="sticky top-[var(--header-h)] z-20 -mx-4 max-md:rounded-none max-md:border-x-0 max-md:border-t-0 sm:-mx-8 md:top-24 md:order-2 md:mx-0" />
+      <Mock quote={quote} vtName="mock" className="pin -mx-4 max-md:rounded-none max-md:border-x-0 max-md:border-t-0 sm:-mx-8 md:order-2 md:mx-0" />
 
       <div className="mt-5 flex flex-col gap-8 md:order-1 md:mt-0">
         <Ticket quote={quote} choose={choose} lines={LINES} startOpen="garment" bands stubRef={stubRef}>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-            <a href="#send" className="btn btn-orange">Send it to the workshop</a>
+            <Link to="#send" className="btn btn-orange">Send it to the workshop</Link>
             <button type="button" onClick={() => { reset(); setReady(false); setErrors({}); }} className="link">Start again</button>
           </div>
         </Ticket>
 
-        <form id="send" ref={sendRef} onSubmit={submit} noValidate className="flex scroll-mt-28 flex-col gap-4 rounded-xs border-2 border-ink bg-paper p-5 sm:p-7">
+        <form id="send" ref={sendRef} onSubmit={submit} noValidate className="flex scroll-mt-[10.5rem] flex-col gap-4 md:scroll-mt-8 rounded-xs border-2 border-ink bg-paper p-5 sm:p-7">
           <h2 className="t-sub">Send it to the workshop</h2>
           <p className="text-mute">Leave your details and we'll come back with a price per item, whether or not you used the estimate.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {FIELDS.map((f) => { const err = f.k === "org" ? undefined : errors[f.k]; return (
               <div key={f.k} className={`flex flex-col gap-1 ${f.k === "email" ? "sm:col-span-2" : ""}`}>
                 <label htmlFor={`${uid}-${f.k}`} className="font-medium">{f.l}</label>
-                <input id={`${uid}-${f.k}`} type={f.type} inputMode={f.mode} autoComplete={f.auto} autoCapitalize={f.k === "email" ? "none" : undefined} spellCheck={f.k === "email" ? false : undefined} aria-invalid={err ? true : undefined} aria-describedby={err ? `${uid}-${f.k}-err` : undefined} value={quote.contact[f.k]} onChange={(e) => set(f.k, e.target.value)} className="field" />
+                <input id={`${uid}-${f.k}`} type={f.type} inputMode={f.mode} autoComplete={f.auto} enterKeyHint="next" autoCapitalize={f.k === "email" ? "none" : undefined} spellCheck={f.k === "email" ? false : undefined} aria-invalid={err ? true : undefined} aria-describedby={err ? `${uid}-${f.k}-err` : undefined} value={quote.contact[f.k]} onChange={(e) => set(f.k, e.target.value)} className="field" />
                 {err && <p id={`${uid}-${f.k}-err`} className="font-medium text-rust">{err}</p>}
               </div>
             ); })}
             <div className="flex flex-col gap-1 sm:col-span-2">
               <label htmlFor={`${uid}-notes`} className="font-medium">Notes: sizes, names, when you need it (optional)</label>
-              <textarea id={`${uid}-notes`} rows={3} value={quote.contact.notes} onChange={(e) => set("notes", e.target.value)} className="field py-2" />
+              <textarea id={`${uid}-notes`} rows={3} enterKeyHint="enter" value={quote.contact.notes} onChange={(e) => set("notes", e.target.value)} className="field py-2" />
             </div>
           </div>
           <button type="submit" className="btn btn-orange self-start">Prepare quote request</button>
@@ -83,7 +84,7 @@ export function QuoteBuilder() {
       </div>
 
       <TotalBar quote={quote} show={benchOn && !stubOn && !sendOn}>
-        <a href="#send" className="btn btn-orange min-h-11 px-4">Send to workshop</a>
+        <Link to="#send" className="btn btn-orange min-h-11 min-w-0 max-w-[13rem] flex-1 px-4 text-center leading-tight">Send to workshop</Link>
       </TotalBar>
     </div>
   );

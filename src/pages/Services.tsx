@@ -47,7 +47,7 @@ export function Services() {
           <TitleRule className="text-rust" />
           <p className="t-lede">Four ways to decorate, plus the garments and the uniform plan. From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
           <nav aria-label="On this page" className="flex flex-wrap gap-x-6">
-            {JUMP.map(([id, l]) => <a key={id} href={`#${id}`} className="link">{l}</a>)}
+            {JUMP.map(([id, l]) => <Link key={id} to={`#${id}`} className="link">{l}</Link>)}
           </nav>
         </div>
       </section>

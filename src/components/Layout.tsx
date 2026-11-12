@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { SITE } from "../data/site";
 import { CONTACT, CONTACT_TO_COME, allKnown } from "../lib/contact";
 import { useQuote } from "../lib/quote";
@@ -14,20 +14,27 @@ export const NAV = [
 ];
 
 export function Logo({ className = "" }: { className?: string }) {
-  return <img src={`${BASE}img/logo/logolab-horizontal-ink.svg`} alt="The London Logo Lab" className={className} width="714" height="122" />;
+  return <img src={`${BASE}img/logo/logolab-horizontal-ink.svg`} alt="The London Logo Lab" className={className} width="714" height="122" decoding="async" fetchPriority="high" />;
 }
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const { quote, saved } = useQuote();
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const menuButton = useRef<HTMLButtonElement>(null);
+  // Opening the menu adds a history entry for the same page, so the phone's Back button or gesture closes it
+  // instead of leaving the page. Links inside the open menu replace that entry.
+  const inHistory = Boolean((location.state as { menu?: boolean } | null)?.menu);
   const g = saved ? store.garment(quote.garment) : undefined;
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => { if (!inHistory) setOpen(false); }, [inHistory, location.key]);
+  const show = () => { setOpen(true); navigate(location.pathname + location.search + location.hash, { state: { menu: true } }); };
+  const hide = () => { setOpen(false); if (inHistory) navigate(-1); menuButton.current?.focus(); };
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       const bar = document.querySelector<HTMLElement>("header");
-      if (e.key === "Escape") { setOpen(false); bar?.querySelector<HTMLElement>("button[aria-controls]")?.focus(); return; }
+      if (e.key === "Escape") { hide(); return; }
       if (e.key !== "Tab" || !bar) return;
       // Keep Tab inside the header and its open panel.
       const stops = [...bar.querySelectorAll<HTMLElement>("a[href], button")].filter((el) => el.offsetParent !== null);
@@ -36,17 +43,18 @@ export function Header() {
       else if (!e.shiftKey && (at === last || !bar.contains(at))) { e.preventDefault(); first.focus(); }
     };
     document.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [open]);
+    // The page behind does not scroll while the menu is open.
+    document.documentElement.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.documentElement.style.overflow = ""; };
+  }); // re-bound each render so `hide` always sees the current history entry
   const quoteWord = g ? "Your quote" : "Build a quote";
   // Plain words. The page you are on is underlined in ink; the way in to the quote always carries the orange line.
   const word = (isActive: boolean) => `inline-flex min-h-11 items-center whitespace-nowrap underline-offset-[7px] ${isActive ? "underline decoration-2" : "hover:underline hover:decoration-2"}`;
   return (
     // One bar on Paper with a 2px Ink rule: the lockup, the pages as plain words, and the promise as a stamp.
-    <header className="sticky top-0 z-40 border-b-2 border-ink bg-paper">
+    <header className="site-header z-40 border-b-2 border-ink bg-paper">
       <div className="wrap flex min-h-16 items-center gap-3 lg:gap-9">
-        <Link to="/" className="inline-flex min-h-11 shrink-0 items-center"><Logo className="h-[22px] w-auto min-[400px]:h-6 sm:h-9" /></Link>
+        <Link to="/" replace={open} className="inline-flex min-h-11 shrink-0 items-center"><Logo className="h-[22px] w-auto min-[400px]:h-6 sm:h-9" /></Link>
         <nav aria-label="Main" className="hidden items-center gap-6 font-medium lg:flex xl:gap-8">
           {NAV.map((n) => <NavLink key={n.to} to={n.to} className={({ isActive }) => word(isActive)}>{n.label}</NavLink>)}
           <NavLink to="/quote" className="inline-flex min-h-11 items-center whitespace-nowrap font-semibold underline decoration-orange decoration-4 underline-offset-[7px] hover:decoration-orange-deep">
@@ -55,20 +63,20 @@ export function Header() {
         </nav>
         <p className="stamp ml-auto hidden shrink-0 md:block">{SITE.minimumOrder} minimum<br />Ready {SITE.turnaround}</p>
         <div className="ml-auto flex items-center gap-1 sm:gap-2 md:ml-2 lg:hidden">
-          <Link to="/quote" className="btn btn-orange min-h-11 whitespace-nowrap px-4">{g ? "Your quote" : "Quote"}</Link>
-          <button type="button" className="inline-flex h-11 w-11 items-center justify-center" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="menu" onClick={() => setOpen(!open)}>
+          <Link to="/quote" replace={open} className="btn btn-orange min-h-11 whitespace-nowrap px-4">{g ? "Your quote" : "Quote"}</Link>
+          <button ref={menuButton} type="button" className="icon-btn inline-flex h-11 w-11 items-center justify-center rounded-xs" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="menu" onClick={() => (open ? hide() : show())}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">{open ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}</svg>
           </button>
         </div>
       </div>
       {open && (
         <>
-          <div className="absolute inset-x-0 top-full h-screen bg-ink/60 lg:hidden" onClick={() => setOpen(false)} aria-hidden="true" />
-          <nav id="menu" aria-label="Menu" className="absolute inset-x-0 top-full max-h-[calc(100dvh-66px)] overflow-y-auto border-b-2 border-ink bg-paper lg:hidden">
+          <div className="absolute inset-x-0 top-full h-lvh touch-none bg-ink/60 lg:hidden" onClick={hide} aria-hidden="true" />
+          <nav id="menu" aria-label="Menu" className="menu-panel absolute inset-x-0 top-full overflow-y-auto overscroll-contain border-b-2 border-ink bg-paper lg:hidden">
             <div className="wrap grid gap-6 py-4 sm:grid-cols-[1.2fr_1fr] sm:py-8">
               <ul className="flex flex-col">
                 {[...NAV, { to: "/quote", label: quoteWord }].map((n) => (
-                  <li key={n.to} className="border-b border-line"><NavLink to={n.to} className={({ isActive }) => `t-sub flex min-h-14 items-center justify-between ${isActive ? "underline decoration-orange decoration-4 underline-offset-8" : ""}`}>{n.label}</NavLink></li>
+                  <li key={n.to} className="border-b border-line"><NavLink to={n.to} replace className={({ isActive }) => `t-sub flex min-h-14 items-center justify-between ${isActive ? "underline decoration-orange decoration-4 underline-offset-8" : ""}`}>{n.label}</NavLink></li>
                 ))}
               </ul>
               <div className="flex flex-col gap-3">
@@ -97,7 +105,7 @@ const ORDER_LINKS = [["/quote", "Quote builder"], ["/garments", "Garments"], ["/
 // The footer is the bottom stub of the job ticket: torn off along a line of punched holes, with the promise and
 // the way in on the left and the links as two short lines on the right. Paper, not a dark block of columns.
 export function Footer() {
-  const item = "inline-flex min-h-11 items-center underline underline-offset-4 hover:decoration-2";
+  const item = "inline-flex min-h-11 min-w-11 items-center underline underline-offset-4 hover:decoration-2";
   const line = (label: string, links: string[][]) => (
     <nav aria-label={label}><ul className="flex flex-wrap gap-x-5">{links.map(([to, l]) => <li key={to}><Link to={to} className={item}>{l}</Link></li>)}</ul></nav>
   );
@@ -121,7 +129,7 @@ export function Footer() {
       </div>
       <div className="wrap">
         <div className="flex flex-col gap-1 border-t-2 border-ink py-5 text-mute lg:flex-row lg:items-baseline lg:justify-between lg:gap-8">
-          <p className="t-small shrink-0">Part of the I&amp;A family: {SITE.family.map((f, i) => <span key={f.name} className="whitespace-nowrap"><a className="inline-flex min-h-11 items-center underline underline-offset-4" href={f.url}>{f.name}</a>{i < SITE.family.length - 1 && ", "}</span>)}</p>
+          <p className="t-small shrink-0">Part of the I&amp;A family: {SITE.family.map((f, i) => <span key={f.name} className="whitespace-nowrap"><a className="inline-flex min-h-11 min-w-11 items-center underline underline-offset-4" href={f.url}>{f.name}</a>{i < SITE.family.length - 1 && ", "}</span>)}</p>
           <p className="t-small lg:text-right">© {CONTACT.legalName ? `${CONTACT.legalName}, trading as ${SITE.name}` : SITE.name}.{SITE.preview && " Concept preview: garments and prices are samples; quote sending opens at launch."}</p>
         </div>
       </div>

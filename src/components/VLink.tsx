@@ -13,7 +13,7 @@ export function VLink({ to, onClick, ...rest }: ComponentProps<typeof Link> & { 
     onClick?.(e);
     const doc = document as Doc;
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    if (!doc.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!doc.startViewTransition || document.visibilityState === "hidden" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     e.preventDefault();
     doc.startViewTransition(() => flushSync(() => navigate(to)));
   };

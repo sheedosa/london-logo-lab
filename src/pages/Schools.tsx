@@ -34,8 +34,8 @@ export function Schools() {
             <p className="t-lede">PE kit, team kit, club and leavers' hoodies. Named and numbered, from {SITE.minimumOrder}, ready {SITE.turnaround}. Lost a shirt mid-season? We'll make you one.</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <VLink to="/quote" onClick={() => update({ garment: "pullover-hoodie", positions: ["left-chest", "back"], qty: 25 })} className="btn btn-ink">Quote a club hoodie</VLink>
-              <a href="#schools" className="link">For schools</a>
-              <a href="#clubs" className="link">For clubs</a>
+              <Link to="#schools" className="link">For schools</Link>
+              <Link to="#clubs" className="link">For clubs</Link>
             </div>
           </div>
           <div className="-mb-6 grid grid-cols-3 items-end md:-mb-10">

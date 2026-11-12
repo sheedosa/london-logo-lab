@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* Fonts are served from this site (no third-party request): one variable file per family, latin only. The two files
+   are preloaded from index.html by the plugin in vite.config.ts. */
+@font-face { font-family: "Archivo"; font-style: normal; font-display: swap; font-weight: 400 600; src: url("../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Bitter"; font-style: normal; font-display: swap; font-weight: 700 900; src: url("../node_modules/@fontsource-variable/bitter/files/bitter-latin-wght-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Metric-matched stand-ins, so text keeps its line breaks and height when the web font swaps in. Arial and Georgia
+   cover iOS, macOS and Windows; Roboto and Noto Serif cover Android. Figures are from the fonts' own tables
+   (average glyph width, ascent, descent) at the weights the site uses. */
+@font-face { font-family: "Archivo Fallback"; src: local("Arial"); font-weight: 400 500; size-adjust: 98.70%; ascent-override: 88.96%; descent-override: 21.28%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo Fallback"; src: local("Arial Bold"), local("Arial-BoldMT"); font-weight: 600 700; size-adjust: 95.00%; ascent-override: 92.42%; descent-override: 22.10%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo Fallback Android"; src: local("Roboto"); font-weight: 400 500; size-adjust: 98.92%; ascent-override: 88.76%; descent-override: 21.23%; line-gap-override: 0%; }
+@font-face { font-family: "Archivo Fallback Android"; src: local("Roboto Bold"), local("Roboto-Bold"); font-weight: 600 700; size-adjust: 100.85%; ascent-override: 87.06%; descent-override: 20.82%; line-gap-override: 0%; }
+@font-face { font-family: "Bitter Fallback"; src: local("Georgia Bold"), local("Georgia-Bold"); font-weight: 800 900; size-adjust: 93.14%; ascent-override: 100.38%; descent-override: 28.45%; line-gap-override: 0%; }
+@font-face { font-family: "Bitter Fallback"; src: local("Georgia Bold"), local("Georgia-Bold"); font-weight: 700; size-adjust: 91.41%; ascent-override: 102.29%; descent-override: 28.99%; line-gap-override: 0%; }
+@font-face { font-family: "Bitter Fallback Android"; src: local("Noto Serif Bold"), local("NotoSerif-Bold"); font-weight: 800 900; size-adjust: 94.34%; ascent-override: 99.11%; descent-override: 28.09%; line-gap-override: 0%; }
+@font-face { font-family: "Bitter Fallback Android"; src: local("Noto Serif Bold"), local("NotoSerif-Bold"); font-weight: 700; size-adjust: 92.58%; ascent-override: 101.00%; descent-override: 28.62%; line-gap-override: 0%; }
+
 /* The London Logo Lab identity: a light, orange-led workshop with a friendly voice.
    Paper (warm off-white) is the ground of every page and of the job ticket; Orange is laid down in whole fields
    (the home hero, one band a page) with Ink type on it; Ink is type and 2px borders, never a ground; Stone is the
@@ -7,8 +23,8 @@
    Display: Bitter, a heavy slab, like a workwear label or a print-shop poster: 900 for the hero, h1 and numerals,
    800 for h2, 700 for h3 and the ticket's title. Text: Archivo 400/500/600. Corners 3px. See docs/BRAND.md. */
 @theme {
-  --font-display: "Bitter", "Rockwell", "Roboto Slab", Georgia, serif;
-  --font-sans: "Archivo", ui-sans-serif, system-ui, Arial, sans-serif;
+  --font-display: "Bitter", "Bitter Fallback", "Bitter Fallback Android", "Rockwell", "Roboto Slab", Georgia, serif;
+  --font-sans: "Archivo", "Archivo Fallback", "Archivo Fallback Android", ui-sans-serif, system-ui, Arial, sans-serif;
   --color-ink: #1b1916;        /* type and 2px borders */
   --color-ink-soft: #2e2a25;   /* hover on an ink button */
   --color-paper: #f3eee4;      /* warm paper */
@@ -39,10 +55,18 @@
   --dur-1: 160ms;
   --dur-2: 420ms;
   --dur-3: 760ms;
-  --header-h: 66px;
+  --header-h: calc(4rem + 2px); /* the sticky bar: 4rem and its 2px rule, so it follows the visitor's text size */
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
 }
+/* A phone on its side has very little height: the header scrolls away with the page and nothing pins under it. */
+@media (orientation: landscape) and (max-height: 480px) { :root { --header-h: 0px; } }
+/* On a short phone the header also gives way on the two pages with a pinned mock-up (the quote and a garment), so
+   header, mock-up and total bar never take more than about a third of the screen between them. */
+@media (max-height: 700px) and (max-width: 767.98px) { :root:has(.pin) { --header-h: 0px; } }
 
-html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 1.25rem); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -50,23 +74,30 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  ::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
-  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 240ms; }
+  /* A page change never holds the visitor up: shared elements settle in 320ms, the cross-fade in 200ms. */
+  ::view-transition-group(*) { animation-duration: 320ms; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 200ms; }
 }
 
 /* Element rules and component classes live in layers so Tailwind utilities always win. */
 @layer base {
   body { @apply bg-paper text-ink font-sans antialiased; font-size: var(--step-body); font-weight: 400; line-height: 1.6; }
   strong, b { font-weight: 600; }
-  h1, h2, h3 { text-wrap: balance; }
+  h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; hyphens: none; }
   p, li, dd { text-wrap: pretty; }
   /* Bitter is a slab with a tall x-height and long serifs: it wants a little air between lines and only a touch of
      negative tracking, or the slabs of neighbouring letters weld together. */
   h1 { font-family: var(--font-display); font-weight: 900; font-size: var(--step-title); line-height: 1.05; letter-spacing: -0.012em; }
   h2 { font-family: var(--font-display); font-weight: 800; font-size: var(--step-section); line-height: 1.08; letter-spacing: -0.01em; }
   h3 { font-family: var(--font-display); font-weight: 700; font-size: var(--step-sub); line-height: 1.22; letter-spacing: 0; }
-  a, button, summary, label { -webkit-tap-highlight-color: transparent; }
+  /* Touch: no grey flash and no double-tap delay; each control has its own pressed state below. */
+  a, button, summary, label, input, select, textarea { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   input, select, textarea { font-size: 1rem; }
+  /* When the keyboard opens, a field scrolls clear of the header and the pinned mock-up above it and of the
+     button below it. */
+  input, textarea, select { scroll-margin-block: calc(var(--header-h) + 11rem) 6rem; }
+  @media (min-width: 768px) { input, textarea, select { scroll-margin-block: calc(var(--header-h) + 2rem) 6rem; } }
+  summary:active { color: var(--color-rust); }
 }
 
 @layer components {
@@ -84,23 +115,44 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
 
   /* Caps labels: form lines on the ticket, table heads and footer headings only. Never above a heading. */
   .label { font-family: var(--font-sans); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; line-height: 1.4; }
-  .wrap { @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8; }
+  /* The page gutter never sits under a notch (the page is laid out edge to edge: viewport-fit=cover). */
+  .wrap { @apply mx-auto w-full max-w-[1320px]; padding-left: max(1rem, var(--safe-l)); padding-right: max(1rem, var(--safe-r)); }
+  @media (min-width: 640px) { .wrap { padding-left: max(2rem, var(--safe-l)); padding-right: max(2rem, var(--safe-r)); } }
+
+  /* The header sticks on a tall screen and scrolls away on a phone held sideways. */
+  .site-header { position: sticky; top: 0; }
+  .menu-panel { max-height: calc(100dvh - var(--header-h)); padding-bottom: var(--safe-b); }
+  @media (orientation: landscape) and (max-height: 480px) {
+    .site-header { position: relative; }
+    .menu-panel { max-height: calc(100dvh - 4rem - 2px); }
+  }
+  .icon-btn:active { background: var(--color-stone); }
   .band { @apply py-14 sm:py-20 lg:py-24; }
 
   .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xs px-5 text-base font-semibold; transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
   .btn-ink { @apply bg-ink text-paper hover:bg-ink-soft; }
   .btn-orange { @apply bg-orange text-ink hover:bg-orange-deep; }
   .btn-ghost { @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
-  .link { @apply inline-flex min-h-11 items-center font-medium underline decoration-2 underline-offset-4; }
+  .link { @apply inline-flex min-h-11 min-w-11 items-center font-medium underline decoration-2 underline-offset-4; }
+  /* Pressed: the control answers the thumb at once (no transition on the way in). */
+  .btn:active, .chip:active, .band-btn:active, .link:active { transition-duration: 0s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-ink:active { background-color: var(--color-ink-soft); }
+  .btn-orange:active { background-color: var(--color-orange-deep); }
+  .btn-ghost:active { background-color: var(--color-ink); color: var(--color-paper); }
+  .link:active { text-decoration-color: var(--color-orange); }
+  .on-orange .link:active { text-decoration-color: var(--color-paper); }
 
   .chip { @apply inline-flex min-h-11 items-center rounded-xs border-2 border-ink bg-transparent px-3.5 text-base font-medium whitespace-nowrap; transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
   .chip[aria-pressed="true"], .chip[aria-current="page"] { @apply bg-ink text-paper; }
   .chip:disabled { @apply cursor-not-allowed border-line text-mute line-through; }
+  .chip:active:not(:disabled):not([aria-pressed="true"]) { background-color: var(--color-line); }
   .chip .sub { color: var(--color-mute); font-size: var(--step-small); font-weight: 400; }
   .chip[aria-pressed="true"] .sub { color: var(--color-paper-mute); }
   .field { @apply min-h-12 w-full rounded-xs border-2 border-ink bg-paper px-3 text-base; }
   .field[aria-invalid="true"] { border-color: var(--color-rust); }
   .swatch { @apply h-11 w-11 rounded-xs border-2 border-ink; }
+  .swatch:active { transform: scale(0.92); }
   .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--color-paper), 0 0 0 4px var(--color-ink); }
 
   /* A ruled list of facts: term left, value right. Used for visit details, order details, the uniform spec. */
@@ -124,7 +176,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   .ticket-perf::before { left: -9px; }
   .ticket-perf::after { right: -9px; }
 
-  .ticket-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding-bottom: 0.875rem; }
+  .ticket-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 0.75rem; padding-bottom: 0.875rem; }
   .ticket-name { font-family: var(--font-display); font-weight: 700; font-size: 1.3125rem; line-height: 1; letter-spacing: 0; }
   /* The confirmed terms, printed like a job number: a rubber stamp in the rust tone. */
   .ticket-stamp, .stamp { border: 2px solid var(--color-rust); color: var(--color-rust); border-radius: 3px; padding: 0.3rem 0.55rem; font-size: 0.75rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.09em; text-transform: uppercase; transform: rotate(-1.5deg); text-align: left; white-space: nowrap; }
@@ -134,6 +186,7 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   @media (min-width: 640px) { .ticket-row { grid-template-columns: 22px 7rem minmax(0, 1fr) 20px; } }
   .ticket-value { display: flex; align-items: center; gap: 0.5rem; min-width: 0; font-weight: 600; line-height: 1.25; }
   .ticket-value > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ticket-row:active { background-color: color-mix(in srgb, var(--color-ink) 7%, transparent); }
   .ticket-row .chev { transition: transform var(--dur-2) var(--ease-out); }
   .ticket-line[data-open="true"] .chev { transform: rotate(180deg); }
   .ticket-opts { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--dur-2) var(--ease-out); }
@@ -150,7 +203,8 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
 
   .ticket-total { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; }
   .band-btn { @apply flex min-h-12 flex-col items-center justify-center rounded-xs border-2 border-line px-1 text-center leading-tight; font-size: var(--step-small); transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out); }
-  .band-btn:hover { border-color: var(--color-ink); }
+  @media (hover: hover) { .band-btn:hover { border-color: var(--color-ink); } }
+  .band-btn:active { border-color: var(--color-ink); }
   .band-btn[aria-pressed="true"] { @apply border-ink bg-ink text-paper; }
 
   /* The mock-up panel the ticket sits beside. */
@@ -185,11 +239,30 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   .tear { height: 14px; background-image: radial-gradient(circle, var(--color-ink) 0 2.6px, transparent 3.1px); background-size: 16px 14px; background-position: 50% 50%; background-repeat: repeat-x; }
 
   /* Sticky action bar on phones. */
-  .bar { position: fixed; inset: auto 0 0 0; z-index: 30; transform: translateY(110%); transition: transform var(--dur-2) var(--ease-out); padding-bottom: env(safe-area-inset-bottom); }
-  .bar[data-show="true"] { transform: none; }
+  .bar { position: fixed; inset: auto 0 0 0; z-index: 30; transform: translateY(110%); visibility: hidden; transition: transform var(--dur-2) var(--ease-out), visibility 0s linear var(--dur-2); padding: 0 var(--safe-r) var(--safe-b) var(--safe-l); }
+  .bar[data-show="true"] { transform: none; visibility: visible; transition-delay: 0s; }
+  /* The mock-up strip that pins under the header on a phone while the ticket is filled in. */
+  .pin { position: sticky; top: var(--header-h); z-index: 20; }
+  @media (min-width: 768px) { .pin { top: calc(var(--header-h) + 1.75rem); } }
+  @media (max-height: 700px) and (max-width: 767.98px) { :root:has(.pin) .site-header { position: relative; } }
+  @media (orientation: landscape) and (max-height: 480px) {
+    /* Sideways: the bar goes (the ticket's own stub has the button) and the mock-up is drawn to fit the height. */
+    .bar { display: none; }
+    .pin { top: 0; }
+    .mock-art svg { max-height: calc(100svh - 14rem); }
+    .mock-strip { padding: 0.75rem !important; }
+  }
+  @media (orientation: landscape) and (max-height: 480px) and (min-width: 768px) { .pin { top: 0.5rem; } }
+  @media (orientation: landscape) and (max-height: 480px) and (max-width: 767.98px) {
+    .mock-art svg { max-height: 4.5rem; }
+    .mock-strip-small { grid-template-columns: 4.5rem minmax(0, 1fr) !important; padding-block: 0.375rem !important; }
+  }
 
   /* Horizontal rail with snap; bleeds to the right edge of the screen. */
-  .rail { display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: var(--color-ink) transparent; padding-bottom: 0.75rem; }
+  .rail { display: flex; gap: 1rem; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scroll-padding-inline: 1rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--color-ink) transparent; padding-bottom: 0.75rem; }
+  /* A row of chips that scrolls sideways on a phone (the garment filters). */
+  .chips-x { overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .chips-x::-webkit-scrollbar { display: none; }
   .rail > * { scroll-snap-align: start; flex: none; }
 }
 
@@ -226,3 +299,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .compare-col dt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (min-width: 1280px) { .compare { column-gap: 2.5rem; } }
+
+/* On a narrow phone a bracketed figure that is kept on one line elsewhere may break, so a table cell never pushes
+   the page sideways. (Outside the layers so it outranks the nowrap utility.) */
+@media (max-width: 430px) { .ledger .whitespace-nowrap, .compare-col .whitespace-nowrap { white-space: normal; } }
