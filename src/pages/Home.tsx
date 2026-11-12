@@ -4,6 +4,7 @@ import { HeroTicket } from "../components/HeroTicket";
 import { Garment } from "../components/Garment";
 import { MethodCloseUp } from "../components/MethodCloseUp";
 import { PhotoSlot } from "../components/PhotoSlot";
+import { Steps } from "../components/Steps";
 import { VLink, garmentVT } from "../components/VLink";
 import { store, type Method } from "../lib/store";
 import { SECTORS, SITE, STEPS } from "../data/site";
@@ -23,60 +24,60 @@ export function Home() {
     <>
       <Seo title="Embroidery, printing and workwear in Tooting, from one item" path="/" description="The London Logo Lab puts your logo on polos, hoodies, hi-vis, caps and aprons: embroidery, screen printing, DTF and vinyl in Tooting, South London. From 1 item, ready within 7 days. See it on the garment before you order." />
 
-      {/* The hero is the job ticket itself. It hangs over the bottom edge of the ink band at desktop widths. */}
-      <section className="on-ink bg-ink text-paper">
-        <div className="wrap grid gap-7 pb-10 pt-8 sm:pt-12 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1fr)] lg:items-start lg:gap-12 lg:pb-14 lg:pt-10 xl:gap-16">
-          <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:gap-7 lg:pt-4">
-            <h1 className="t-hero">We put your logo on workwear and kit.</h1>
-            <p className="t-lede text-paper-mute">Polos, hoodies, hi-vis, caps and aprons for trades, schools and sports clubs, made in our Tooting workshop. You see the logo on the garment before you order.</p>
-            <p className="hidden max-w-[30em] text-paper-mute lg:block">Start the ticket here: pick a garment and how many. Your choices follow you to the full quote.</p>
+      {/* An orange field. The headline runs the full width across the top; the working ticket and the drawing lie
+          side by side beneath it, like a job on a print table. */}
+      <section className="on-orange bg-orange">
+        <div className="wrap pb-10 pt-8 sm:pt-12 lg:pb-16 lg:pt-14">
+          <h1 className="t-hero">We put your logo on workwear and kit.</h1>
+          <div className="mt-5 grid gap-x-12 gap-y-3 lg:mt-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)] lg:items-end">
+            <p className="t-lede font-medium">Polos, hoodies, hi-vis, caps and aprons for trades, schools and sports clubs, made in our Tooting workshop. You see the logo on the garment before you order.</p>
+            <p className="hidden lg:block">Start the ticket here: pick a garment and how many. Your choices follow you to the full quote.</p>
           </div>
-          <HeroTicket />
+          <div className="mt-7 lg:mt-10"><HeroTicket /></div>
         </div>
       </section>
 
-      {/* Four ways to decorate, each with its close-up; the two supply services as plain lines underneath */}
-      <section className="wrap band grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
+      {/* Four ways to decorate: four columns, the drawn close-up large on top (two by two on a phone); the two
+          supply services as plain lines underneath */}
+      <section className="wrap band">
+        <div className="flex flex-col items-center gap-3 text-center">
           <h2>Embroidery, screen printing, DTF and vinyl</h2>
-          <p className="measure text-mute">Tell us what the garment is for and we'll suggest which of the four suits it.</p>
-          <Link to="/services" className="link self-start">Compare the four</Link>
+          <p className="text-mute">Tell us what the garment is for and we'll suggest which of the four suits it.</p>
         </div>
-        <div>
-          <ul className="border-t-2 border-ink">
-            {DECORATION.map((s) => (
-              <li key={s.id} className="border-b border-ink">
-                <Link to={s.to} className="group grid grid-cols-[72px_minmax(0,1fr)] items-center gap-x-5 py-4 sm:grid-cols-[88px_minmax(0,0.8fr)_minmax(0,1fr)]">
-                  <MethodCloseUp method={s.id} decorative className="row-span-2 w-full sm:row-span-1" />
-                  <h3 className="underline-offset-4 group-hover:underline">{s.t}</h3>
-                  <p className="text-mute">{s.d}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-            <p><Link to="/services#workwear" className="font-semibold underline decoration-2 underline-offset-4">Workwear supply.</Link> We supply the garments too, plain or decorated. One polo or a van load.</p>
-            <p><Link to="/services#uniforms" className="font-semibold underline decoration-2 underline-offset-4">Uniforms.</Link> We keep your spec on file, so a re-order is just a message.</p>
-          </div>
+        <ul className="mt-9 grid grid-cols-2 gap-x-5 gap-y-9 lg:mt-12 lg:grid-cols-4 lg:gap-x-10">
+          {DECORATION.map((s) => (
+            <li key={s.id}>
+              <Link to={s.to} className="group flex flex-col items-center gap-2 text-center">
+                <MethodCloseUp method={s.id} decorative className="mb-2 w-full max-w-[232px]" />
+                <h3 className="underline-offset-4 group-hover:underline">{s.t}</h3>
+                <p className="max-w-[17em] text-mute">{s.d}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 flex justify-center lg:mt-12"><Link to="/services" className="btn btn-ghost">Compare the four</Link></div>
+        <div className="mt-10 grid gap-x-12 gap-y-5 border-t-2 border-ink pt-7 sm:grid-cols-2 lg:mt-14">
+          <p><Link to="/services#workwear" className="font-semibold underline decoration-2 underline-offset-4">Workwear supply.</Link> We supply the garments too, plain or decorated. One polo or a van load.</p>
+          <p><Link to="/services#uniforms" className="font-semibold underline decoration-2 underline-offset-4">Uniforms.</Link> We keep your spec on file, so a re-order is just a message.</p>
         </div>
       </section>
 
       {/* Who it's for. Three customers, three different compositions. */}
-      <section className="wrap pb-10 sm:pb-14">
-        <h2 className="max-w-[14em]">Who we make it for</h2>
+      <section className="wrap pb-8 sm:pb-10">
+        <h2>Who we make it for</h2>
       </section>
 
-      {/* Trades: a full-bleed ink band, the jacket front and the hi-vis back side by side, large */}
-      <section className="on-ink bg-ink text-paper">
-        <div className="wrap grid items-end gap-8 py-12 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:py-0 lg:gap-16">
-          <div className="flex flex-col gap-4 md:py-20">
+      {/* Trades: a framed stone bench, the jacket front and the hi-vis back standing on its bottom edge */}
+      <section className="wrap">
+        <div className="grid items-end gap-x-8 gap-y-7 rounded-xs border-2 border-ink bg-stone px-5 pt-8 sm:px-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:pt-0 lg:gap-x-16 lg:px-12">
+          <div className="flex flex-col gap-4 md:py-14 lg:py-20">
             <h3 className="t-section">{trades.t}</h3>
-            <p className="t-lede text-paper-mute">{trades.d}</p>
+            <p className="t-lede">{trades.d}</p>
             <VLink to={trades.to} className="btn btn-orange mt-2 self-start">Build a quote</VLink>
           </div>
-          <div className="grid grid-cols-2 gap-3 md:pt-12">
-            <div className="rounded-t-xs bg-stone px-3 pt-4 sm:px-6 sm:pt-8"><Garment kind={softshell.kind} colour="#1f1d1b" positions={["left-chest"]} title={`${softshell.title} for trades`} className="w-full" /></div>
-            <div className="rounded-t-xs bg-stone px-3 pt-4 sm:px-6 sm:pt-8"><Garment kind={vest.kind} colour="#e7f23a" positions={["back"]} view="back" title={`${vest.title} for trades, back`} className="w-full" /></div>
+          <div className="grid grid-cols-2 gap-3 md:pt-10">
+            <div className="rounded-t-xs border-2 border-b-0 border-ink bg-paper px-3 pt-4 sm:px-6 sm:pt-8"><Garment kind={softshell.kind} colour="#1f1d1b" positions={["left-chest"]} title={`${softshell.title} for trades`} className="w-full" /></div>
+            <div className="rounded-t-xs border-2 border-b-0 border-ink bg-paper px-3 pt-4 sm:px-6 sm:pt-8"><Garment kind={vest.kind} colour="#e7f23a" positions={["back"]} view="back" title={`${vest.title} for trades, back`} className="w-full" /></div>
           </div>
         </div>
       </section>
@@ -109,29 +110,16 @@ export function Home() {
         </div>
       </section>
 
-      {/* How it works: a real sequence, so it is numbered */}
-      <section className="wrap band grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
-          <h2>How it works</h2>
-          <Link to="/quote" className="btn btn-ghost self-start">Start a quote</Link>
-        </div>
-        <ol className="border-t-2 border-ink">
-          {STEPS.map((s, i) => (
-            <li key={s.n} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 border-b border-ink py-5 sm:grid-cols-[3.5rem_minmax(0,0.8fr)_minmax(0,1fr)] sm:gap-x-6">
-              <span className="t-num text-rust" aria-hidden="true">{i + 1}</span>
-              <h3 className="self-center">{s.t}</h3>
-              <p className="col-start-2 text-mute sm:col-start-3">{s.d}</p>
-            </li>
-          ))}
-        </ol>
+      {/* How it works: a real sequence, so it is one strip of four steps on a stitched line */}
+      <section className="wrap band">
+        <h2>How it works</h2>
+        <Steps steps={STEPS} className="mt-8 lg:mt-10" />
+        <Link to="/quote" className="btn btn-ghost mt-8 lg:mt-10">Start a quote</Link>
       </section>
 
       {/* The range as a rail: all twelve, bleeding off the right edge */}
       <section className="bg-stone py-14 sm:py-20">
-        <div className="wrap flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
-          <h2>Garments we decorate</h2>
-          <Link to="/garments" className="link">See all {store.garments().length} with colours and positions</Link>
-        </div>
+        <div className="wrap"><h2>Garments we decorate</h2></div>
         <div className="wrap mt-8 !pr-0">
           <ul className="rail pr-4 sm:pr-8">
             {store.garments().map((g) => { const c = g.colours[Math.min(1, g.colours.length - 1)]; return (
@@ -144,6 +132,7 @@ export function Home() {
             ); })}
           </ul>
         </div>
+        <div className="wrap mt-3"><Link to="/garments" className="link">See all {store.garments().length} with colours and positions</Link></div>
       </section>
 
       {/* The workshop: one photo slot, a plain note and where to find us */}

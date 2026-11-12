@@ -69,9 +69,9 @@ function Detail({ g }: { g: G }) {
         </div>
       </section>
 
-      <section className="wrap band grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
+      <section className="wrap band">
         <h2>The details</h2>
-        <div className="border-t-2 border-ink">
+        <div className="mt-6 max-w-[52rem] border-t-2 border-ink">
           <details open className="border-b border-ink"><summary className="t-sub flex min-h-14 cursor-pointer items-center">Details</summary><p className="measure pb-5 text-mute">{g.details}</p></details>
           <details className="border-b border-ink"><summary className="t-sub flex min-h-14 cursor-pointer items-center">Decoration and artwork</summary><p className="measure pb-5 text-mute">Positions: {g.positions.map((x) => `${store.position(x).label} (${store.position(x).size})`).join("; ")}. Send vector artwork where you can; we get it ready to stitch or print (setup: <span className="whitespace-nowrap">£[SETUP]</span>) and send a proof before anything is made.</p></details>
           <details className="border-b border-ink"><summary className="t-sub flex min-h-14 cursor-pointer items-center">Sizing, care and returns</summary><p className="measure pb-5 text-mute">Size chart: [SIZE CHART]. Wash inside out at [WASH TEMPERATURE]. Decorated garments are made to order: [RETURNS POLICY ON DECORATED GOODS].</p></details>
@@ -79,9 +79,9 @@ function Detail({ g }: { g: G }) {
       </section>
 
       <section className="wrap">
-        <div className="grid gap-x-10 gap-y-5 border-t border-ink pt-8 lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)] lg:pt-10">
+        <div className="flex flex-col gap-6 border-t-2 border-ink pt-8 lg:pt-10">
           <h2>{related.length ? `Also in ${cat.title.toLowerCase()}` : "More garments"}</h2>
-          <div className={`grid gap-x-5 gap-y-5 sm:grid-cols-2 ${others.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-4"}`}>{others.map((x) => <GarmentCard key={x.handle} g={x} />)}</div>
+          <div className={`grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-4`}>{others.map((x) => <GarmentCard key={x.handle} g={x} />)}</div>
         </div>
       </section>
 

@@ -282,7 +282,7 @@ function wrap(text: string, n: number): string[] {
 
 /** A typed name, sized to the box on up to three lines and never below `min` (viewBox units, about 10px on a card). */
 function LogoText({ box, text, fill, min = 10 }: { box: Box; text: string; fill: string; min?: number }) {
-  const EM = 0.74; // average advance of Archivo Black capitals
+  const EM = 0.7; // average advance of Bitter 900 capitals (0.67 measured), with a little room for wide letters
   let best = { lines: [text], size: 0 };
   for (let n = 1; n <= 3; n++) {
     const lines = wrap(text, n);
@@ -295,7 +295,7 @@ function LogoText({ box, text, fill, min = 10 }: { box: Box; text: string; fill:
   const lh = size * 1.02;
   const top = box.y + box.h / 2 - ((best.lines.length - 1) * lh) / 2;
   return (
-    <g fill={fill} fontFamily="Archivo Black, Archivo, Arial, sans-serif" fontSize={size} textAnchor="middle">
+    <g fill={fill} fontFamily="Bitter, Rockwell, Georgia, serif" fontWeight={900} fontSize={size} textAnchor="middle">
       {best.lines.map((l, i) => {
         const natural = l.length * EM * size;
         const squeeze = natural > box.w - 2 ? { textLength: box.w - 2, lengthAdjust: "spacingAndGlyphs" as const } : {};

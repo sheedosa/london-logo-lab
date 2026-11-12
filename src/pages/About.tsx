@@ -34,15 +34,15 @@ export function About() {
       <Seo title="About and visit: the workshop in Tooting" path="/about" description="The London Logo Lab is an embroidery and print workshop in Tooting, South London. How we work, what to bring, and how to find us."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "About & visit", path: "/about" }]), { "@context": "https://schema.org", "@type": "AboutPage", name: "About The London Logo Lab" }]} />
 
-      <section className="on-ink bg-ink text-paper">
+      <section className="on-orange bg-orange">
         <div className="wrap grid items-center gap-10 pb-12 pt-4 md:grid-cols-[minmax(0,1fr)_auto] lg:pb-16 lg:pt-8">
           <div className="flex flex-col gap-5">
-            <Crumbs trail={[{ to: "/", label: "Home" }]} here="About & visit" className="text-paper-mute" />
+            <Crumbs trail={[{ to: "/", label: "Home" }]} here="About & visit" className="text-ink" />
             <h1 className="max-w-[10em]">A friendly workshop in Tooting.</h1>
-            <TitleRule className="text-orange" />
-            <p className="t-lede text-paper-mute">We stitch and print logos for trades, schools and sports clubs. Come in, show us your logo, and we'll help you get it right. Part of the I&amp;A family.</p>
+            <TitleRule />
+            <p className="t-lede">We stitch and print logos for trades, schools and sports clubs. Come in, show us your logo, and we'll help you get it right. Part of the I&amp;A family.</p>
           </div>
-          <Marque size={220} tile="#f4651f" thread="#1b1916" className="hidden md:block md:h-40 md:w-40 lg:h-[220px] lg:w-[220px]" />
+          <Marque size={220} className="hidden md:block md:h-40 md:w-40 lg:h-[220px] lg:w-[220px]" />
         </div>
       </section>
 

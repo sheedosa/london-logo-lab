@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
-/* The London Logo Lab identity: Bold workshop, friendly voice.
-   Ink (warm near-black) is the ground for hero, bands and footer; Paper (warm off-white) for reading and for the
-   job ticket; Stone is the workbench the ticket lies on; Orange is the one accent (fill with Ink text, or on Ink).
-   Display: Archivo Black for the hero, page titles and numerals; Archivo 800 at 88% width for longer section lines.
-   Text: Archivo 400/500/600 at normal width. Corners 3px. See docs/BRAND.md. */
+/* The London Logo Lab identity: a light, orange-led workshop with a friendly voice.
+   Paper (warm off-white) is the ground of every page and of the job ticket; Orange is laid down in whole fields
+   (the home hero, one band a page) with Ink type on it; Ink is type and 2px borders, never a ground; Stone is the
+   bench the ticket lies on.
+   Display: Bitter, a heavy slab, like a workwear label or a print-shop poster: 900 for the hero, h1 and numerals,
+   800 for h2, 700 for h3 and the ticket's title. Text: Archivo 400/500/600. Corners 3px. See docs/BRAND.md. */
 @theme {
-  --font-display: "Archivo Black", "Archivo", "Arial Black", sans-serif;
+  --font-display: "Bitter", "Rockwell", "Roboto Slab", Georgia, serif;
   --font-sans: "Archivo", ui-sans-serif, system-ui, Arial, sans-serif;
-  --color-ink: #1b1916;        /* ground and text */
-  --color-ink-soft: #2e2a25;   /* hover on ink */
-  --color-deep: #121110;       /* footer, pressed states */
+  --color-ink: #1b1916;        /* type and 2px borders */
+  --color-ink-soft: #2e2a25;   /* hover on an ink button */
   --color-paper: #f3eee4;      /* warm paper */
   --color-stone: #e6dfd0;      /* neutral surface, warm bias */
   --color-line: #d9d1c2;
   --color-mute: #5f5850;       /* secondary text: 6.0:1 on paper, 5.3:1 on stone */
-  --color-paper-mute: #c9c2b5; /* secondary text on ink: 9.9:1 */
-  --color-orange: #f4651f;     /* accent: 5.6:1 against ink */
+  --color-paper-mute: #c9c2b5; /* secondary text on a pressed (ink) chip: 9.9:1 */
+  --color-orange: #f4651f;     /* fields and buttons, with ink type: 5.6:1 */
   --color-orange-deep: #d9530f;
   --color-rust: #b54106;       /* orange for stamps and icons on paper/stone: 4.9:1 on paper */
   --radius-xs: 3px;
@@ -24,10 +24,11 @@
 
 :root {
   /* One fluid scale. Pages use the .t-* classes (or bare h1/h2) and never set a heading size themselves. */
-  --step-hero: clamp(2.625rem, 1.6rem + 4.35vw, 5.5rem);      /* 42 to 88 */
-  --step-title: clamp(2.375rem, 1.65rem + 3.1vw, 4.25rem);    /* 38 to 68 */
-  --step-section: clamp(1.875rem, 1.42rem + 1.9vw, 3.125rem); /* 30 to 50 */
-  --step-sub: clamp(1.1875rem, 1.11rem + 0.34vw, 1.4375rem);  /* 19 to 23 */
+  --step-hero: clamp(2.625rem, 9.6vw, 8.125rem);              /* 42 to 130: two lines that run the width of the page */
+  --step-title: clamp(2.125rem, 1.55rem + 2.5vw, 3.75rem);    /* 34 to 60 */
+  --step-section: clamp(1.75rem, 1.4rem + 1.5vw, 2.75rem);    /* 28 to 44 */
+  --step-head: clamp(1.4375rem, 1.3rem + 0.55vw, 1.8125rem);  /* 23 to 29: the head of a column or a rail */
+  --step-sub: clamp(1.1875rem, 1.12rem + 0.3vw, 1.375rem);    /* 19 to 22 */
   --step-lede: clamp(1.125rem, 1.06rem + 0.3vw, 1.3125rem);   /* 18 to 21 */
   --step-quote: clamp(1.375rem, 1.21rem + 0.7vw, 1.875rem);   /* 22 to 30 */
   --step-body: 1.0625rem;                                      /* 17 */
@@ -55,41 +56,40 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
 
 /* Element rules and component classes live in layers so Tailwind utilities always win. */
 @layer base {
-  body { @apply bg-paper text-ink font-sans antialiased; font-size: var(--step-body); font-weight: 400; line-height: 1.6; font-stretch: 100%; }
+  body { @apply bg-paper text-ink font-sans antialiased; font-size: var(--step-body); font-weight: 400; line-height: 1.6; }
   strong, b { font-weight: 600; }
   h1, h2, h3 { text-wrap: balance; }
   p, li, dd { text-wrap: pretty; }
-  /* Archivo Black is wide and loosely fitted: pull it in and set it almost solid. */
-  h1 { font-family: var(--font-display); font-weight: 400; font-size: var(--step-title); line-height: 0.98; letter-spacing: -0.028em; }
-  /* Longer lines: the text family at 800, slightly condensed, so a sentence still fits a phone in two or three lines. */
-  h2 { font-family: var(--font-sans); font-weight: 800; font-stretch: 88%; font-size: var(--step-section); line-height: 1.04; letter-spacing: -0.018em; }
-  h3 { font-weight: 600; font-size: var(--step-sub); line-height: 1.25; letter-spacing: -0.005em; }
+  /* Bitter is a slab with a tall x-height and long serifs: it wants a little air between lines and only a touch of
+     negative tracking, or the slabs of neighbouring letters weld together. */
+  h1 { font-family: var(--font-display); font-weight: 900; font-size: var(--step-title); line-height: 1.05; letter-spacing: -0.012em; }
+  h2 { font-family: var(--font-display); font-weight: 800; font-size: var(--step-section); line-height: 1.08; letter-spacing: -0.01em; }
+  h3 { font-family: var(--font-display); font-weight: 700; font-size: var(--step-sub); line-height: 1.22; letter-spacing: 0; }
   a, button, summary, label { -webkit-tap-highlight-color: transparent; }
   input, select, textarea { font-size: 1rem; }
 }
 
 @layer components {
-  .t-hero { font-family: var(--font-display); font-weight: 400; font-size: var(--step-hero); line-height: 0.96; letter-spacing: -0.03em; }
-  .t-title { font-family: var(--font-display); font-weight: 400; font-size: var(--step-title); line-height: 0.98; letter-spacing: -0.028em; }
-  .t-section { font-family: var(--font-sans); font-weight: 800; font-stretch: 88%; font-size: var(--step-section); line-height: 1.04; letter-spacing: -0.018em; }
-  .t-sub { font-family: var(--font-sans); font-weight: 600; font-stretch: 100%; font-size: var(--step-sub); line-height: 1.25; letter-spacing: -0.005em; }
+  .t-hero { font-family: var(--font-display); font-weight: 900; font-size: var(--step-hero); line-height: 1; letter-spacing: -0.018em; word-spacing: 0.06em; }
+  .t-title { font-family: var(--font-display); font-weight: 900; font-size: var(--step-title); line-height: 1.05; letter-spacing: -0.012em; }
+  .t-section { font-family: var(--font-display); font-weight: 800; font-size: var(--step-section); line-height: 1.08; letter-spacing: -0.01em; }
+  .t-head { font-family: var(--font-display); font-weight: 800; font-size: var(--step-head); line-height: 1.12; letter-spacing: -0.005em; }
+  .t-sub { font-family: var(--font-display); font-weight: 700; font-size: var(--step-sub); line-height: 1.22; letter-spacing: 0; }
   .t-lede { font-size: var(--step-lede); line-height: 1.5; max-width: 34em; }
   .t-quote { font-size: var(--step-quote); font-weight: 500; line-height: 1.3; letter-spacing: -0.008em; max-width: 26em; }
   .t-small { font-size: var(--step-small); line-height: 1.5; }
-  /* Big figures: Archivo Black, tabular so a changing price does not jiggle. */
-  .t-num { font-family: var(--font-display); font-size: var(--step-num); line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  /* Big figures: Bitter 900, lining and tabular so a changing price does not jiggle. */
+  .t-num { font-family: var(--font-display); font-weight: 900; font-size: var(--step-num); line-height: 1; letter-spacing: -0.01em; font-variant-numeric: lining-nums tabular-nums; }
   .measure { max-width: 62ch; }
 
   /* Caps labels: form lines on the ticket, table heads and footer headings only. Never above a heading. */
-  .label { font-family: var(--font-sans); font-stretch: 100%; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; line-height: 1.4; }
+  .label { font-family: var(--font-sans); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 600; font-size: 0.75rem; line-height: 1.4; }
   .wrap { @apply mx-auto w-full max-w-[1320px] px-4 sm:px-8; }
   .band { @apply py-14 sm:py-20 lg:py-24; }
 
   .btn { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xs px-5 text-base font-semibold; transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out); }
   .btn-ink { @apply bg-ink text-paper hover:bg-ink-soft; }
   .btn-orange { @apply bg-orange text-ink hover:bg-orange-deep; }
-  .btn-paper { @apply bg-paper text-ink hover:bg-stone; }
-  .btn-outline-paper { @apply border-2 border-paper bg-transparent text-paper hover:bg-paper hover:text-ink; }
   .btn-ghost { @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
   .link { @apply inline-flex min-h-11 items-center font-medium underline decoration-2 underline-offset-4; }
 
@@ -125,9 +125,9 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   .ticket-perf::after { right: -9px; }
 
   .ticket-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding-bottom: 0.875rem; }
-  .ticket-name { font-family: var(--font-display); font-size: 1.25rem; line-height: 1; letter-spacing: -0.02em; }
+  .ticket-name { font-family: var(--font-display); font-weight: 700; font-size: 1.3125rem; line-height: 1; letter-spacing: 0; }
   /* The confirmed terms, printed like a job number: a rubber stamp in the rust tone. */
-  .ticket-stamp { border: 2px solid var(--color-rust); color: var(--color-rust); border-radius: 3px; padding: 0.3rem 0.55rem; font-size: 0.75rem; font-weight: 700; line-height: 1.3; letter-spacing: 0.09em; text-transform: uppercase; transform: rotate(-1.5deg); text-align: left; }
+  .ticket-stamp, .stamp { border: 2px solid var(--color-rust); color: var(--color-rust); border-radius: 3px; padding: 0.3rem 0.55rem; font-size: 0.75rem; font-weight: 600; line-height: 1.3; letter-spacing: 0.09em; text-transform: uppercase; transform: rotate(-1.5deg); text-align: left; white-space: nowrap; }
 
   .ticket-line { border-top: 1px solid var(--color-ink); }
   .ticket-row { display: grid; grid-template-columns: 22px 6.5rem minmax(0, 1fr) 20px; align-items: center; column-gap: 0.625rem; width: 100%; min-height: 3.25rem; padding: 0.375rem 0; text-align: left; }
@@ -164,6 +164,26 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
   .title-rule { display: block; width: min(100%, 11rem); height: 6px; overflow: visible; }
   .title-rule line { stroke: currentColor; stroke-width: 3; stroke-dasharray: 12 11; stroke-linecap: round; }
 
+  /* How it works: four steps on one thread. The thread runs down the left on a phone and across the top from lg;
+     each step's number is a tile sewn onto it. */
+  .steps { position: relative; display: grid; gap: 1.75rem; }
+  .steps > li { position: relative; display: grid; grid-template-columns: 3.25rem minmax(0, 1fr); column-gap: 1rem; align-items: start; }
+  .steps-n { position: relative; display: flex; align-items: center; justify-content: center; width: 3.25rem; height: 3.25rem; border: 2px solid var(--color-ink); border-radius: 3px; background: var(--color-orange); font-family: var(--font-display); font-weight: 900; font-size: 1.625rem; line-height: 1; font-variant-numeric: lining-nums; }
+  .steps-thread { position: absolute; overflow: visible; pointer-events: none; left: calc(1.625rem - 3px); top: 0; width: 6px; height: calc(100% - 4.5rem); }
+  .steps-thread line { stroke: var(--color-ink); stroke-width: 3; stroke-dasharray: 12 11; stroke-linecap: round; }
+  .steps-thread .across { display: none; }
+  @media (min-width: 1024px) {
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; }
+    .steps > li { display: flex; flex-direction: column; gap: 0.75rem; }
+    .steps-n { margin-bottom: 0.5rem; }
+    .steps-thread { left: 0; top: calc(1.625rem - 3px); width: calc(75% + 2rem); height: 6px; }
+    .steps-thread .down { display: none; }
+    .steps-thread .across { display: inline; }
+  }
+
+  /* The footer is the bottom stub of the ticket: a line of punched holes, torn across the page. */
+  .tear { height: 14px; background-image: radial-gradient(circle, var(--color-ink) 0 2.6px, transparent 3.1px); background-size: 16px 14px; background-position: 50% 50%; background-repeat: repeat-x; }
+
   /* Sticky action bar on phones. */
   .bar { position: fixed; inset: auto 0 0 0; z-index: 30; transform: translateY(110%); transition: transform var(--dur-2) var(--ease-out); padding-bottom: env(safe-area-inset-bottom); }
   .bar[data-show="true"] { transform: none; }
@@ -176,11 +196,10 @@ html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
 @keyframes feed { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
 @keyframes mock-swap { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 
-/* Focus: ink ring with an orange halo on light grounds, orange ring on ink. */
+/* Focus: ink ring with an orange halo on paper and stone; ink ring with a paper halo on an orange field. */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; box-shadow: 0 0 0 5px var(--color-orange); }
-.on-ink a:focus-visible, .on-ink button:focus-visible, .on-ink input:focus-visible, .on-ink summary:focus-visible { outline: 3px solid var(--color-orange); box-shadow: none; }
 .on-orange a:focus-visible, .on-orange button:focus-visible { outline: 3px solid var(--color-ink); box-shadow: 0 0 0 6px var(--color-paper); }
-.on-ink .ticket a:focus-visible, .on-ink .ticket button:focus-visible, .on-ink .ticket input:focus-visible { outline: 2px solid var(--color-ink); box-shadow: 0 0 0 5px var(--color-orange); }
+.on-orange .ticket a:focus-visible, .on-orange .ticket button:focus-visible, .on-orange .ticket input:focus-visible, .on-orange .mock a:focus-visible, .on-orange .mock button:focus-visible { outline: 2px solid var(--color-ink); box-shadow: 0 0 0 5px var(--color-orange); }
 
 /* ---- Services: the four methods as a comparison. Below lg each method is its own block with labelled rows;
    from lg the four blocks sit side by side on shared rows (subgrid), with the row names in a rail on the left. ---- */

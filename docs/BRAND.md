@@ -37,32 +37,41 @@ Clear space: the height of the marque tile on all sides. Minimum width: 120px ho
 
 | Token | Hex | Role |
 | --- | --- | --- |
-| Ink | `#1b1916` | Ground for hero, panels, footer; all body text on light grounds |
-| Paper | `#f3eee4` | Warm page ground; text on ink |
-| Orange | `#f4651f` | The one accent. Fills with ink text (5.6:1), or text on ink (5.6:1). Never text on paper |
-| Stone | `#e6dfd0` | Neutral surface with a warm bias: cards, bands, photo slots |
-| Mute | `#5f5850` | Secondary text: 6.0:1 on paper, 5.3:1 on stone |
-| Paper mute | `#c9c2b5` | Secondary text on ink: 9.9:1 |
-| Deep | `#121110` | Footer and pressed states |
-| Line | `#d9d1c2` | Hairlines and dividers |
+| Paper | `#f3eee4` | The ground of every page, the ticket and the footer |
+| Orange | `#f4651f` | Laid down in whole fields: the home hero, one band or title field on a page. Type on it is Ink (5.6:1). Also the button fill. Never text on paper |
+| Ink | `#1b1916` | Type and 2px borders. Never a ground: no ink hero, band, footer or bar |
+| Stone | `#e6dfd0` | The bench the ticket lies on; the neutral band; photo slots |
+| Mute | `#5f5850` | Secondary text on paper (6.0:1) and stone (5.3:1). Not used on orange |
+| Rust | `#b54106` | The stamp and the stitched title rule on paper: 4.9:1 |
+| Line | `#d9d1c2` | Hairlines and unchosen option borders |
 
 Orange-deep `#d9530f` is the hover state for orange buttons. No gradients. No alpha text.
 
 ## Type
 
-- **Archivo Black** (Google Fonts): wordmark, the home hero, page titles (h1) and large numerals such as the ticket total. Set tight: tracking about -0.03em, leading 0.96 to 0.98. Never below 18px.
-- **Archivo** (variable, width and weight axes): section titles (h2) and other longer display lines at weight 800 and 88% width, so a sentence fits a phone in two or three lines; text at 400, emphasis at 500 or 600, always at normal width, 17px with 1.6 leading and lines of 45 to 75 characters.
-- The voice is friendly: sentence case everywhere (headings, buttons, links), short lines, plain workshop words. Upper case is kept for the wordmark, the lines of the job ticket, filter names and footer headings (12px, 0.15em).
+Each business in the group owns one class of letter. The London Logo Lab owns the **heavy slab**: the lettering of a workwear label and a print-shop poster.
+
+- **Bitter** (Google Fonts, weights 700, 800, 900): 900 for the home headline, page titles (h1) and large numerals such as the ticket total; 800 for section titles (h2) and column heads; 700 for h3 and the ticket's title. Sentence case. Tracking -0.01em (about -0.018em with a little extra word space at headline size, 0 on h3); leading 1.0 on the headline, about 1.05 on titles, 1.2 on h3. The home headline is sized to run the width of the page on two lines.
+- **Archivo** (400, 500, 600): all text, labels and controls, 17px with 1.6 leading and lines of 45 to 75 characters.
+- **Archivo Black** is the wordmark only. It lives in the outlined logo SVGs and is not loaded by the site.
+- The voice is friendly: sentence case everywhere (headings, buttons, links), short lines, plain workshop words. Upper case is kept for the wordmark, the stamp, the lines of the job ticket and filter names (12px, 0.15em).
 - One fluid scale lives in `src/index.css` (`--step-hero` to `--step-small`). Fonts load from Google Fonts in `index.html`; change `--font-display` and `--font-sans` in `src/index.css` only.
+
+## Page furniture
+
+- **Header:** one bar on paper with a 2px ink rule. The lockup, the pages as plain words, and "1 item minimum, ready within 7 days" as a rust stamp at the right. No strip above it. On a phone: lockup, an orange Quote button and the menu.
+- **Home hero:** an orange field. The headline across the full width, then the garment drawing on a paper sheet and the working job ticket side by side on the orange, like a job on a print table.
+- **Sequences:** numbered orange tiles on one stitched ink thread, across the page on a desktop and down the left edge on a phone.
+- **Footer:** paper, shaped like the bottom stub of the ticket: a line of punched holes, the promise and the quote button on the left, the links as two short lines on the right, then the family and legal line, which carries the preview notice.
 
 ## Shapes and motion
 
 - Corners 3px everywhere (buttons, tiles, inputs); the marque tile is the one exception at 5%.
 - Borders are 2px ink; rules between rows are 1px ink.
-- **The job ticket** is the site's signature: a paper ticket with a running-stitch border in orange (the marque's stitch), a perforated tear line above the total, the confirmed terms as a rust stamp in the header, and a stitched tick on each line once it is chosen. The stitch border appears only on the ticket; a short stitched rule sits under page titles. Nothing else is stitched.
+- **The job ticket** is the site's signature: a paper ticket with a running-stitch border in orange (the marque's stitch), a perforated tear line above the total, the confirmed terms as a rust stamp in the header, and a stitched tick on each line once it is chosen. The stitch border appears only on the ticket; a short stitched rule sits under page titles and one thread joins the steps of a sequence. Nothing else is stitched.
 - No rule grids, gradients or drop shadows.
 - Motion answers an action: a ticket line opening, a tick stitching in, the drawing changing. The hero ticket arriving is the one unprompted moment. `prefers-reduced-motion` switches all motion off.
-- Focus: 2px ink ring with an orange halo on light grounds; 3px orange ring on ink.
+- Focus: 2px ink ring with an orange halo on paper and stone; 3px ink ring with a paper halo on an orange field.
 
 ## Illustration
 

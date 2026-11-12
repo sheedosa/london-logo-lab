@@ -36,7 +36,7 @@ type Props = {
   quick?: string[];
   startOpen?: LineId | null;
   /** The surface the ticket lies on; the punched holes show it through. */
-  ground?: "ink" | "stone";
+  ground?: "orange" | "stone";
   /** Show the four quantity bands in the stub. */
   bands?: boolean;
   /** Printed under the ticket name when the garment is fixed (garment pages). */
@@ -146,7 +146,7 @@ export function Ticket({ quote, choose, lines, quick, startOpen = null, ground =
   };
 
   return (
-    <article className={`ticket ${className}`} style={{ ...TICKET_VT, ["--ground" as string]: ground === "ink" ? "var(--color-ink)" : "var(--color-stone)" }} aria-label="Job ticket: your quote">
+    <article className={`ticket ${className}`} style={{ ...TICKET_VT, ["--ground" as string]: ground === "orange" ? "var(--color-orange)" : "var(--color-stone)" }} aria-label="Job ticket: your quote">
       <div className="ticket-body">
         <Stitch />
         <div className="ticket-head">
@@ -237,9 +237,9 @@ export function Mock({ quote, vtName, className = "" }: { quote: Quote; vtName?:
 export function TotalBar({ quote, show, children }: { quote: Quote; show: boolean; children: ReactNode }) {
   const est = estimate(quote)!;
   return (
-    <div className="bar on-ink border-t-2 border-ink bg-ink text-paper md:hidden" data-show={show} inert={!show}>
+    <div className="bar border-t-2 border-ink bg-paper md:hidden" data-show={show} inert={!show}>
       <div className="flex min-h-16 items-center justify-between gap-3 px-4 py-2">
-        <p className="flex flex-col leading-tight"><span className="t-small text-paper-mute">Sample estimate</span><span><b className="text-[1.125rem]">from {gbp(est.perItem)}</b> per item</span></p>
+        <p className="flex flex-col leading-tight"><span className="t-small text-mute">Sample estimate</span><span><b className="text-[1.125rem]">from {gbp(est.perItem)}</b> per item</span></p>
         {children}
       </div>
     </div>

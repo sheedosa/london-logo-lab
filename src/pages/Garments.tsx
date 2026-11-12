@@ -56,7 +56,7 @@ export function Garments() {
         {groups.length ? groups.map(({ c, items }) => (
           <div key={c.handle} className="grid gap-x-10 gap-y-5 border-t border-ink py-8 lg:grid-cols-[minmax(0,0.3fr)_minmax(0,1fr)] lg:py-10">
             <div className="lg:sticky lg:top-28 lg:self-start">
-              <h3 className="t-section">{c.title}</h3>
+              <h3 className="t-head">{c.title}</h3>
               <p className="mt-2 max-w-[28em] text-mute">{c.blurb}</p>
             </div>
             <div className="grid gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-y-8">{items.map((g) => <GarmentCard key={g.handle} g={g} />)}</div>

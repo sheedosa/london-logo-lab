@@ -4,6 +4,7 @@ import { Crumbs } from "../components/Crumbs";
 import { Garment } from "../components/Garment";
 import { MethodCloseUp } from "../components/MethodCloseUp";
 import { PhotoSlot } from "../components/PhotoSlot";
+import { Steps } from "../components/Steps";
 import { Nb } from "../components/Nb";
 import { TitleRule } from "../components/Icons";
 import { VLink } from "../components/VLink";
@@ -39,12 +40,12 @@ export function Services() {
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }]),
           ...JUMP.map(([id, name]) => ({ "@context": "https://schema.org", "@type": "Service", name, provider: { "@type": "LocalBusiness", name: SITE.name }, areaServed: "London", url: `${SITE.url}/services#${id}` }))]} />
 
-      <section className="on-ink bg-ink text-paper">
-        <div className="wrap flex flex-col gap-5 pb-12 pt-4 lg:pb-16 lg:pt-8">
-          <Crumbs trail={[{ to: "/", label: "Home" }]} here="Services" className="text-paper-mute" />
-          <h1 className="max-w-[13em]">Embroidery, print and the garments to put them on.</h1>
-          <TitleRule className="text-orange" />
-          <p className="t-lede text-paper-mute">Four ways to decorate, plus the garments and the uniform plan. From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
+      <section className="border-b-2 border-ink">
+        <div className="wrap flex flex-col gap-5 pb-8 pt-4 lg:pb-12 lg:pt-8">
+          <Crumbs trail={[{ to: "/", label: "Home" }]} here="Services" />
+          <h1 className="max-w-[15em]">Embroidery, print and the garments to put them on.</h1>
+          <TitleRule className="text-rust" />
+          <p className="t-lede">Four ways to decorate, plus the garments and the uniform plan. From {SITE.minimumOrder}, ready {SITE.turnaround}.</p>
           <nav aria-label="On this page" className="flex flex-wrap gap-x-6">
             {JUMP.map(([id, l]) => <a key={id} href={`#${id}`} className="link">{l}</a>)}
           </nav>
@@ -65,7 +66,7 @@ export function Services() {
             <article key={m.id} id={m.id} className="compare-col scroll-mt-24">
               <header className="flex flex-col gap-3 pb-5">
                 <MethodCloseUp method={m.id} className="w-28 lg:w-[7.5rem]" />
-                <h3 className="t-section">{m.name}</h3>
+                <h3 className="t-head">{m.name}</h3>
                 <p>{m.what}</p>
               </header>
               <dl className="contents">
@@ -81,7 +82,7 @@ export function Services() {
         </div>
       </section>
 
-      <section id="workwear" className="scroll-mt-24 bg-stone">
+      <section id="workwear" className="scroll-mt-24 border-t-2 border-ink">
         <div className="wrap band grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16">
           <div className="flex flex-col gap-4">
             <h2>Workwear supply</h2>
@@ -89,46 +90,36 @@ export function Services() {
             <p className="text-mute">Twelve sample garments are on the site now. The full range is coming.</p>
             <Link to="/garments" className="btn btn-ink mt-2 self-start">See the garments</Link>
           </div>
-          <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3] !bg-paper" />
+          <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3]" />
         </div>
       </section>
 
-      <section id="uniforms" className="on-ink scroll-mt-24 bg-ink text-paper">
+      <section id="uniforms" className="on-orange scroll-mt-24 bg-orange">
         <div className="wrap band grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1fr)] lg:gap-16">
           <div className="flex flex-col gap-4">
             <h2>Uniforms</h2>
-            <p className="t-lede text-paper-mute">For a team of three or a whole school. We keep your spec on file: garments, colours, logo files, positions, who gets what. New starter? Send a size. Re-order? Send a number.</p>
-            <ul className="mt-2 border-t border-mute">
-              {["One saved spec per team, role or site", "Names and sizes held on file", "Roll out by department or location", `Every order ready ${SITE.turnaround}`].map((x) => <li key={x} className="border-b border-mute py-3">{x}</li>)}
+            <p className="t-lede">For a team of three or a whole school. We keep your spec on file: garments, colours, logo files, positions, who gets what. New starter? Send a size. Re-order? Send a number.</p>
+            <ul className="mt-2 border-t border-ink">
+              {["One saved spec per team, role or site", "Names and sizes held on file", "Roll out by department or location", `Every order ready ${SITE.turnaround}`].map((x) => <li key={x} className="border-b border-ink py-3">{x}</li>)}
             </ul>
-            <Link to="/quote" className="btn btn-orange mt-3 self-start">Start a uniform</Link>
+            <Link to="/quote" className="btn btn-ink mt-3 self-start">Start a uniform</Link>
           </div>
           <div>
             <div className="grid grid-cols-3 gap-2">
-              {(["classic-polo", "softshell-jacket", "hi-vis-vest"] as const).map((h, i) => { const g = store.garment(h)!; return <div key={h} className="rounded-xs bg-stone p-2"><Garment kind={g.kind} colour={["#1e2a44", "#1f1d1b", "#e7f23a"][i]} positions={i === 2 ? ["back"] : ["left-chest", "right-chest"]} view={i === 2 ? "back" : "front"} title={g.title} className="w-full" /></div>; })}
+              {(["classic-polo", "softshell-jacket", "hi-vis-vest"] as const).map((h, i) => { const g = store.garment(h)!; return <div key={h} className="rounded-xs border-2 border-ink bg-paper p-2"><Garment kind={g.kind} colour={["#1e2a44", "#1f1d1b", "#e7f23a"][i]} positions={i === 2 ? ["back"] : ["left-chest", "right-chest"]} view={i === 2 ? "back" : "front"} title={g.title} className="w-full" /></div>; })}
             </div>
             <h3 className="mt-6">Sample uniform spec</h3>
-            <dl className="ledger mt-3" style={{ ["--ledger-rule" as string]: "var(--color-mute)" }}>
-              {[["Who", "[CLIENT]"], ["Garments", "Classic polo (navy), softshell (black), hi-vis waistcoat"], ["Logo", "Left chest, embroidered; back print on hi-vis"], ["Names", "Right chest, embroidered"], ["Roles", "Site: all three. Office: polo only"]].map(([k, v]) => <div key={k}><dt>{k}</dt><dd className="text-paper-mute">{v}</dd></div>)}
+            <dl className="ledger mt-3 border-b border-ink">
+              {[["Who", "[CLIENT]"], ["Garments", "Classic polo (navy), softshell (black), hi-vis waistcoat"], ["Logo", "Left chest, embroidered; back print on hi-vis"], ["Names", "Right chest, embroidered"], ["Roles", "Site: all three. Office: polo only"]].map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
             </dl>
           </div>
         </div>
       </section>
 
-      <section className="wrap band grid gap-x-12 gap-y-8 !pb-0 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-5 lg:sticky lg:top-28 lg:self-start">
-          <h2>How it works</h2>
-          <Link to="/quote" className="btn btn-ghost self-start">Start a quote</Link>
-        </div>
-        <ol className="border-t-2 border-ink">
-          {STEPS.map((s, i) => (
-            <li key={s.n} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-x-4 border-b border-ink py-5 sm:grid-cols-[3.5rem_minmax(0,0.8fr)_minmax(0,1fr)] sm:gap-x-6">
-              <span className="t-num text-rust" aria-hidden="true">{i + 1}</span>
-              <h3 className="self-center">{s.t}</h3>
-              <p className="col-start-2 text-mute sm:col-start-3">{s.d}</p>
-            </li>
-          ))}
-        </ol>
+      <section className="wrap band !pb-0">
+        <h2>How it works</h2>
+        <Steps steps={STEPS} className="mt-8 lg:mt-10" />
+        <Link to="/quote" className="btn btn-ghost mt-8 lg:mt-10">Start a quote</Link>
       </section>
     </>
   );

@@ -60,22 +60,22 @@ export function Schools() {
         </div>
       </section>
 
-      {/* Clubs: an ink band, the shirt back with name and number leading, the rest of the kit bag as a row */}
-      <section id="clubs" className="on-ink scroll-mt-24 bg-ink text-paper">
+      {/* Clubs: a stone bench, the shirt back with name and number leading, the rest of the kit bag as a row */}
+      <section id="clubs" className="scroll-mt-24 bg-stone">
         <div className="wrap band grid gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] lg:gap-x-20">
           <div className="flex flex-col gap-4">
             <h2>For sports clubs</h2>
-            <p className="t-lede text-paper-mute">Names and numbers on the back, initials on the sleeve, a sponsor if you have one. A squad list in a spreadsheet is fine.</p>
-            <dl className="mt-2 border-t border-mute">
+            <p className="t-lede">Names and numbers on the back, initials on the sleeve, a sponsor if you have one. A squad list in a spreadsheet is fine.</p>
+            <dl className="mt-2 border-t-2 border-ink">
               {[["Club hoodies", "Crest on the chest, names on the back."], ["Coaches and staff", "Softshells and fleeces for the touchline and the gate."]].map(([t, d]) => (
-                <div key={t} className="border-b border-mute py-4"><dt className="t-sub">{t}</dt><dd className="mt-1 text-paper-mute">{d}</dd></div>
+                <div key={t} className="border-b border-ink py-4"><dt className="t-sub">{t}</dt><dd className="mt-1 text-mute">{d}</dd></div>
               ))}
             </dl>
           </div>
           <div className="grid grid-cols-4 items-end gap-2 sm:gap-3">
-            <div className="col-span-2 rounded-xs bg-stone p-3 sm:p-5"><Garment kind={tee.kind} colour="#b4262a" positions={["back"]} view="back" logo={{ kind: "text", text: "SMITH 9" }} title={`${tee.title} for team kit, back with SMITH 9`} className="w-full" /></div>
-            <div className="rounded-xs bg-stone p-2 sm:p-3"><Garment kind={hoodie.kind} colour="#1e2a44" positions={["left-chest"]} title={`${hoodie.title} for club hoodies`} className="w-full" /></div>
-            <div className="rounded-xs bg-stone p-2 sm:p-3"><Garment kind={softshell.kind} colour="#1f1d1b" positions={["left-chest"]} title={`${softshell.title} for coaches and staff`} className="w-full" /></div>
+            <div className="col-span-2 rounded-xs bg-paper p-3 sm:p-5"><Garment kind={tee.kind} colour="#b4262a" positions={["back"]} view="back" logo={{ kind: "text", text: "SMITH 9" }} title={`${tee.title} for team kit, back with SMITH 9`} className="w-full" /></div>
+            <div className="rounded-xs bg-paper p-2 sm:p-3"><Garment kind={hoodie.kind} colour="#1e2a44" positions={["left-chest"]} title={`${hoodie.title} for club hoodies`} className="w-full" /></div>
+            <div className="rounded-xs bg-paper p-2 sm:p-3"><Garment kind={softshell.kind} colour="#1f1d1b" positions={["left-chest"]} title={`${softshell.title} for coaches and staff`} className="w-full" /></div>
           </div>
         </div>
       </section>
