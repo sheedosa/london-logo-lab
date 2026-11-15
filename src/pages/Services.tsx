@@ -83,14 +83,14 @@ export function Services() {
       </section>
 
       <section id="workwear" className="scroll-mt-24 border-t-2 border-ink">
-        <div className="wrap band grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16">
+        <div className="wrap band grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
           <div className="flex flex-col gap-4">
             <h2>Workwear supply</h2>
             <p className="t-lede">We supply the garments too, plain or decorated: polos, tees, sweats, hoodies, fleece, softshells, hi-vis, caps, beanies and aprons. Brands: [BRANDS STOCKED]. One polo or a van load.</p>
             <p className="text-mute">Twelve sample garments are on the site now. The full range is coming.</p>
             <Link to="/garments" className="btn btn-ink mt-2 self-start">See the garments</Link>
           </div>
-          <PhotoSlot shows="Boxed polos, folded and labelled, ready for collection." className="aspect-[4/3]" />
+          <PhotoSlot shows="Boxed polos, folded and labelled for collection, shot from above." />
         </div>
       </section>
 

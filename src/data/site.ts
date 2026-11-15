@@ -16,6 +16,9 @@ export const SITE = {
     { name: "I&A Fashions", url: "https://sheedosa.github.io/iana-fashions/" },
     { name: "I&A Formal", url: "https://sheedosa.github.io/iana-tailoring/" },
   ],
+  // Search engines are asked not to list the site (noindex, follow on every page) until the client confirms the
+  // facts and wants it in search: then set this to true. Titles, Open Graph, JSON-LD and the sitemap stay either way.
+  indexable: false,
   preview: true, // concept preview: sample garments, sample pricing formula, quote sending switched off
   // Confirmed by the client
   services: ["Embroidery", "Screen printing", "DTF printing", "Vinyl", "Workwear supply", "Uniforms"],
@@ -36,7 +39,7 @@ export const SITE = {
     "delivery charges, collection, and returns on decorated goods",
     "school and club terms (parent ordering, named items, numbering, sizing days)",
     "client reviews for the testimonial slot",
-    "workshop photographs for the photo slots",
+    "workshop photographs: the embroidery machine (About), boxed polos (Services), one macro per method to replace the drawn close-ups",
   ],
 };
 

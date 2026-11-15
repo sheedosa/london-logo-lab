@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Seo, breadcrumbs } from "../components/Seo";
 import { Crumbs } from "../components/Crumbs";
 import { Garment } from "../components/Garment";
-import { PhotoSlot } from "../components/PhotoSlot";
 import { Nb } from "../components/Nb";
 import { TitleRule } from "../components/Icons";
 import { VLink } from "../components/VLink";
@@ -101,7 +100,6 @@ export function Schools() {
             </dl>
           </div>
           <p className="text-mute">[Client review, to come]</p>
-          <PhotoSlot shows="A rail of crested PE polos, sized small to large." className="min-h-[220px]" />
         </div>
       </section>
 

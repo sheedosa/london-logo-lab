@@ -46,7 +46,7 @@ export function About() {
         </div>
       </section>
 
-      <section className="wrap band grid gap-x-12 gap-y-10 md:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-x-20">
+      <section className="wrap band grid gap-x-12 gap-y-10 md:grid-cols-[minmax(0,1fr)_20rem] lg:gap-x-20">
         <div className="flex flex-col gap-5">
           <h2>What happens behind the counter</h2>
           <p className="t-lede">Your logo comes in and we check it. We get it ready to stitch or print. You get a proof. Once you say yes, we make it, check it, fold it and bag it. One shirt or a hundred, ready {SITE.turnaround}.</p>
@@ -54,7 +54,7 @@ export function About() {
             {WORKSHOP.map(([t, d]) => <div key={t}><dt>{t}</dt><dd className="text-mute">{d}</dd></div>)}
           </dl>
         </div>
-        <PhotoSlot shows="The embroidery machine mid-run, a club crest half stitched." className="min-h-[300px]" />
+        <PhotoSlot shows="The embroidery machine mid-run on a club crest, hands out of the frame." className="md:self-center" />
       </section>
 
       <section className="bg-stone">

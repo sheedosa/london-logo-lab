@@ -3,7 +3,6 @@ import { Seo, WEBSITE_LD } from "../components/Seo";
 import { HeroTicket } from "../components/HeroTicket";
 import { Garment } from "../components/Garment";
 import { MethodCloseUp } from "../components/MethodCloseUp";
-import { PhotoSlot } from "../components/PhotoSlot";
 import { Steps } from "../components/Steps";
 import { VLink, garmentVT } from "../components/VLink";
 import { store, type Method } from "../lib/store";
@@ -135,10 +134,9 @@ export function Home() {
         <div className="wrap mt-3"><Link to="/garments" className="link">See all {store.garments().length} with colours and positions</Link></div>
       </section>
 
-      {/* The workshop: one photo slot, a plain note and where to find us */}
-      <section className="wrap band grid gap-8 !pb-0 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)] md:items-center lg:gap-16">
-        <PhotoSlot shows="Finished embroidery on a navy fleece, close up." className="min-h-[260px] md:min-h-[340px]"><MethodCloseUp method="embroidery" decorative className="w-full" /></PhotoSlot>
-        <div className="flex flex-col gap-4">
+      {/* The workshop: a plain note and where to find us */}
+      <section className="wrap band !pb-0">
+        <div className="flex max-w-[44rem] flex-col gap-4">
           <h2>Come and see us in {SITE.area}.</h2>
           <p className="t-lede">Bring your logo on your phone. We'll show you how it looks on the garment and help you choose thread or print.</p>
           <p className="text-mute">{CONTACT.address && CONTACT.hours ? `${CONTACT.address}. Open ${CONTACT.hours}.` : "The workshop address and opening hours are to come."}</p>
