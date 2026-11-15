@@ -22,7 +22,7 @@ export function Schools() {
   const polo = store.garment("classic-polo")!, tee = store.garment("heavy-tee")!, hoodie = store.garment("pullover-hoodie")!, softshell = store.garment("softshell-jacket")!;
   return (
     <>
-      <Seo title="Schools and clubs: PE kit, team kits, club and leavers' hoodies" path="/schools-and-clubs" description="Crested PE kit, team kit with names and numbers, club hoodies and leavers' hoodies for schools and sports clubs, from The London Logo Lab in Tooting. From 1 item, ready within 7 days."
+      <Seo title="Schools and clubs: PE and team kit" path="/schools-and-clubs" description="Crested PE kit, team kit with names and numbers, club and leavers' hoodies for schools and sports clubs, from our workshop in Tooting. Ready within 7 days."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Schools & clubs", path: "/schools-and-clubs" }]), { "@context": "https://schema.org", "@type": "Service", name: "School and club kit", serviceType: "Embroidered and printed kit for schools and clubs", provider: { "@type": "LocalBusiness", name: SITE.name }, areaServed: "London" }]} />
 
       <section className="on-orange overflow-hidden bg-orange">

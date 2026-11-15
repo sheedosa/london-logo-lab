@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Seo, breadcrumbs } from "../components/Seo";
+import { Seo, breadcrumbs, absolute, fit } from "../components/Seo";
 import { Crumbs } from "../components/Crumbs";
 import { GarmentCard } from "../components/GarmentCard";
 import { Mock, Ticket, TotalBar } from "../components/Ticket";
@@ -39,9 +39,9 @@ function Detail({ g }: { g: G }) {
 
   return (
     <>
-      <Seo title={g.title} path={path} type="product" description={`${g.title}: ${g.blurb} ${methodList(g.methods)}, from ${SITE.minimumOrder}, ready ${SITE.turnaround}. Positions ${g.positions.map((x) => store.position(x).label.toLowerCase()).join(", ")}. The London Logo Lab, Tooting.`}
+      <Seo title={g.title} path={path} type="product" image={`/img/og/p/${g.handle}.jpg`} imageAlt={`${g.title}, drawn flat, beside The London Logo Lab lockup`} description={fit(`${g.title}: ${g.blurb}`, `${methodList(g.methods)}, from ${SITE.minimumOrder}, ready ${SITE.turnaround}.`, `Positions: ${g.positions.map((x) => store.position(x).label.toLowerCase()).join(", ")}.`, "The London Logo Lab, Tooting.")}
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Garments", path: "/garments" }, { name: g.title, path }]),
-          { "@context": "https://schema.org", "@type": "Product", name: g.title, description: g.details, color: g.colours.map((x) => x.name).join(", "), brand: { "@type": "Brand", name: SITE.name }, category: cat.title }]} />
+          { "@context": "https://schema.org", "@type": "Product", name: g.title, description: `${g.blurb} ${g.details.replace(/\s*\[[A-Z ]+\]\.?/g, "")}`, image: absolute(`/img/og/p/${g.handle}.jpg`), color: g.colours.map((x) => x.name).join(", "), brand: { "@type": "Brand", name: SITE.name }, category: cat.title }]} />
 
       {/* The bench: title, then the drawing with a ticket started for this garment */}
       <section className="bg-stone">

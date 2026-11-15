@@ -36,7 +36,7 @@ export function Services() {
   };
   return (
     <>
-      <Seo title="Services: embroidery, screen printing, DTF, vinyl, workwear and uniforms" path="/services" description="What The London Logo Lab does in Tooting: embroidery, screen printing, DTF printing and vinyl on workwear, plus workwear supply and uniforms for trades, schools and sports clubs. From 1 item, ready within 7 days."
+      <Seo title="Embroidery, printing and workwear" path="/services" description="Embroidery, screen printing, DTF printing and vinyl on workwear, plus workwear supply and uniforms for trades, schools and sports clubs. From 1 item."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }]),
           ...JUMP.map(([id, name]) => ({ "@context": "https://schema.org", "@type": "Service", name, provider: { "@type": "LocalBusiness", name: SITE.name }, areaServed: "London", url: `${SITE.url}/services#${id}` }))]} />
 

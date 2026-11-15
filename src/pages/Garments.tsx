@@ -23,7 +23,7 @@ export function Garments() {
   const filtered = category !== "all" || method !== null;
   return (
     <>
-      <Seo title="Garments: polos, tees, hoodies, hi-vis, caps and aprons" path="/garments" description="Twelve sample garments, from one item, The London Logo Lab decorates: polos, t-shirts, sweatshirts, hoodies, fleece, softshell, hi-vis, caps, beanies and aprons, with colours and logo positions for each."
+      <Seo title="Garments: polos, hoodies and caps" path="/garments" description="Twelve sample garments we decorate: polos, t-shirts, sweatshirts, hoodies, fleece, softshell, hi-vis, caps, beanies and aprons, with colours and positions."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Garments", path: "/garments" }]), { "@context": "https://schema.org", "@type": "CollectionPage", name: "Garments", description: "Sample garment range for embroidery and print." }]} />
 
       <section className="wrap flex flex-col gap-4 pb-6 pt-4 lg:pt-8">

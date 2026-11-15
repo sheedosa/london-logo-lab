@@ -31,7 +31,7 @@ const WORKSHOP = [
 export function About() {
   return (
     <>
-      <Seo title="About and visit: the workshop in Tooting" path="/about" description="The London Logo Lab is an embroidery and print workshop in Tooting, South London. How we work, what to bring, and how to find us."
+      <Seo title="About the workshop in Tooting" path="/about" description="The London Logo Lab is an embroidery and print workshop in Tooting, South London, working from 1 item. How we work, what to bring, and how to find us."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "About & visit", path: "/about" }]), { "@context": "https://schema.org", "@type": "AboutPage", name: "About The London Logo Lab" }]} />
 
       <section className="on-orange bg-orange">

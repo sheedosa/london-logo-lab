@@ -8,7 +8,7 @@ import { SITE } from "../data/site";
 export function QuotePage() {
   return (
     <>
-      <Seo title="Quote builder with a live mock-up" path="/quote" description="Build an embroidery or print quote: choose a garment, colour, quantity, decoration and logo positions, upload your logo, and see it placed on a flat mock-up with a sample estimate by quantity band."
+      <Seo title="Quote builder with a live mock-up" path="/quote" description="Build an embroidery or print quote: garment, colour, quantity, decoration and positions. Upload your logo and see it on a flat mock-up with a sample estimate."
         jsonLd={[breadcrumbs([{ name: "Home", path: "/" }, { name: "Quote builder", path: "/quote" }]), { "@context": "https://schema.org", "@type": "WebApplication", name: "Logo Lab quote builder", applicationCategory: "BusinessApplication", operatingSystem: "Web", offers: { "@type": "Offer", price: "0", priceCurrency: "GBP" } }]} />
 
       {/* The workbench: a stone band the paper ticket lies on */}

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Seo } from "../components/Seo";
+import { Seo, WEBSITE_LD } from "../components/Seo";
 import { HeroTicket } from "../components/HeroTicket";
 import { Garment } from "../components/Garment";
 import { MethodCloseUp } from "../components/MethodCloseUp";
@@ -22,7 +22,7 @@ export function Home() {
   const [trades, schools, clubs] = SECTORS;
   return (
     <>
-      <Seo title="Embroidery, printing and workwear in Tooting, from one item" path="/" description="The London Logo Lab puts your logo on polos, hoodies, hi-vis, caps and aprons: embroidery, screen printing, DTF and vinyl in Tooting, South London. From 1 item, ready within 7 days. See it on the garment before you order." />
+      <Seo title="Embroidery and printing in Tooting" path="/" jsonLd={WEBSITE_LD} description="Your logo on polos, hoodies, hi-vis, caps and aprons: embroidery, screen printing, DTF and vinyl in Tooting, South London. From 1 item, ready within 7 days." />
 
       {/* An orange field. The headline runs the full width across the top; the working ticket and the drawing lie
           side by side beneath it, like a job on a print table. */}
