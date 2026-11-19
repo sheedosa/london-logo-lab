@@ -57,3 +57,11 @@ Every link must work and share fully on GitHub Pages (`https://sheedosa.github.i
 - **Structured data allowed:** `LocalBusiness` with the confirmed facts only (name, area "Tooting, London", services) on every page, `WebSite` on Home, `BreadcrumbList` on inner pages, `Product` for each garment with name, description (placeholders such as `[FABRIC COMPOSITION]` stripped), image and brand. **No `offers`** (prices are `£[PRICE]` or sample estimates), and no address, phone, email, hours or legal name until they are known.
 - **Head:** `lang="en-GB"`, theme colour Paper `#f3eee4` (the header), SVG favicon plus `favicon-32.png`, 180px `apple-touch-icon`, `site.webmanifest` with `scope`, 192, 512 and a maskable 512 icon (`_scripts/icons.mjs` from `logolab-marque-icon.svg`). Every path carries `/london-logo-lab/`.
 - **Deep links:** `public/404.html` (noindex) sends an unknown path to `/?p=`, `main.tsx` restores it and draws afresh, and a path no route matches shows `NotFound`. `public/.nojekyll` is deployed. Search engines read only `https://sheedosa.github.io/robots.txt` for a project site.
+
+## UX evidence (v9)
+Every design or wording change names its evidence: a published standard or study (GOV.UK Service Manual and Design System, Baymard, WCAG 2.2) or a measurement taken on this site. No change on taste alone. Measured in November 2026 on every route at 390 and 1280 with `/home/claude/builds/v9/measure.cjs` (results in `/home/claude/builds/v9/`) and `forms.cjs`.
+- **Reading level.** Prose is written for a reading age of about 9 (GOV.UK content design): sentences of 25 words or fewer, one idea each.
+- **Kept on purpose:** one h1 per page, no vague button or link label, no unnamed control, no sideways overflow, every field with a visible label, and an empty form marks the fields to fix, describes each one and moves focus to the first.
+- **Not done yet:** nobody has been watched using the site. Before launch, watch three to five real customers do the main task on their own phones.
+- **This pass:** no sentence over 25 words and no page over the target, so no wording changed.
+- **The ticket** opens one line at a time, which is GOV.UK's one thing per page inside the site's own signature; keep it that way.
